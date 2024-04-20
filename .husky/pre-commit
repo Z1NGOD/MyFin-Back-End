@@ -1,0 +1,16 @@
+echo '\033[1;32mI'\''m gonna see how you did with your writing you stinky boy!\033[0m' && npm run lint && echo '\033[1;34mLinting passed! Good job!👍\033[0m' || (
+    echo -e '\033[1;31mI'\''ve tried to fix your stinky code, but it'\''s impossible. GO AND REWRITE THAT S**T!🤢🤮\033[0m'
+    false;
+)
+echo '\033[1;32mLet'\''s see if i can format your code\033[0m' && npm run format && echo '\033[1;34mFormatting passed! Well done!👏\033[0m' || (
+    echo -e '\033[1;31mI'\''ve tried to format this but it'\''s impossible. HOW IS THIS EVEN POSSIBLE?!\033[0m'
+    false;
+)
+echo '\033[1;32mRunning unit tests...\033[0m' && npm run test && echo '\033[1;34mUnit tests passed! Keep it up!🎉\033[0m' || (
+    echo -e '\033[1;31mYour testing skills are bad, go read the docs or sum🙄🤡\033[0m'
+    false;
+)
+echo '\033[1;32mRunning end-to-end tests...\033[0m' && npm run test:e2e && echo '\033[1;34mEnd-to-end tests passed! Excellent!🚀\033[0m' || (
+    echo -e '\033[1;31mYour testing skills are bad, go read the docs or sum🙄🤡\033[0m'
+    false;
+)
