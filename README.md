@@ -2,7 +2,7 @@
     
 ## Description
 
-Welcome to the __MyFin API!__ This API is designed to help users manage their expenses effectively by providing features such as spending journal, statistics analysis, and budget setting and control. Our API is created for MyFin App using [NestJS](https://github.com/nestjs/nest).
+Welcome to the __MyFin API!__ This API is designed to help users manage their expenses effectively by providing features such as spending journal, statistics analysis, and budget setting and control. Our API is created for MyFin App using [NestJS](https://github.com/nestjs/nest). Also, please, install [NVM](https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/) to avoid errors.
 
 Version: __0.0.1__
 
@@ -17,7 +17,7 @@ $ git clone https://github.com/Z1NGOD/MyFin-Back-End.git
  2. Install dependencies 
 
  ```bash
- $ npm install
+ $ npm ci
  ```
 
 
