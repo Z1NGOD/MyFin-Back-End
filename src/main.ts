@@ -19,6 +19,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
+  app.setGlobalPrefix('api/v1', { exclude: ['api-docs'] });
+
   // Security
   app.use(helmet());
   app.enableCors();
