@@ -21,6 +21,35 @@ describe('appController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('/POST registration successfull', async () => {
+    const userMock = {
+      firstName: 'string',
+      lastName: 'string',
+      email: 'string@gmail.com',
+      password: 'Q*123qw231eqw23e132qwe',
+    };
+
+    return await request(app.getHttpServer())
+      .post('/auth/registration')
+      .send(userMock)
+      .expect(201)
+      .expect(userMock);
+  });
+
+  it('/POST registration failed', async () => {
+    const userMock = {
+      lastName: '',
+      email: 'string',
+      password: '1232qwe',
+    };
+
+    return await request(app.getHttpServer())
+      .post('/auth/registration')
+      .send(userMock)
+      .expect(400);
+  });
+
   afterEach(async () => {
     await app.close();
   });
