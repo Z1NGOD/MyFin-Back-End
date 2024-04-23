@@ -15,6 +15,7 @@ async function bootstrap() {
     .setTitle(pkgName)
     .setDescription(pkgDescription)
     .setVersion(pkgJsonVersion)
+    .addServer('https://myfin-back-end.onrender.com/')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
