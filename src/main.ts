@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
 import {
   version as pkgJsonVersion,
   description as pkgDescription,
@@ -20,6 +21,18 @@ async function bootstrap() {
   SwaggerModule.setup('api-docs', app, document);
 
   app.setGlobalPrefix('api/v1', { exclude: ['api-docs'] });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      stopAtFirstError: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+        exposeUnsetFields: false,
+      },
+    }),
+  );
 
   // Security
   app.use(helmet());
