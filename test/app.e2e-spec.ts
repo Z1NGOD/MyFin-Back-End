@@ -10,7 +10,7 @@ describe('appController (e2e)', () => {
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    process.env.DB_TEST_URI = mongoServer.getUri();
+    process.env.DB_URI = mongoServer.getUri();
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
