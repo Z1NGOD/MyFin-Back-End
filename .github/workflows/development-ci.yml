@@ -29,7 +29,7 @@ jobs:
       - name: Run unit tests with code coverage
         run: npm run test:cov
       - name: Checkception - Run action locally with its own coverage
-        uses: themichaelhall/check-code-coverage@v2
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          report: 'coverage/clover.xml'
-          required-percentage: 70
+          github-token: ${{ secrets.GH_TOKEN }}
+          coverage-file: ./coverage-final.json
