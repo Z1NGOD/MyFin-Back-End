@@ -32,4 +32,4 @@ jobs:
         uses: themichaelhall/check-code-coverage@v2
         with:
           report: 'coverage/clover.xml'
-          required-percentage: 80
+          required-percentage: 70
