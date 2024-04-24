@@ -36,7 +36,6 @@ async function bootstrap() {
     }),
   );
 
-  // Security
   app.use(helmet());
   app.enableCors();
 
