@@ -32,4 +32,3 @@ jobs:
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           github-token: ${{ secrets.GH_TOKEN }}
-          coverage-file: ./coverage-final.json
