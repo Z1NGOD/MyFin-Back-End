@@ -1,12 +1,17 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { type INestApplication } from '@nestjs/common';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
 describe('appController (e2e)', () => {
   let app: INestApplication;
+  let mongoServer: MongoMemoryServer;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
+    mongoServer = await MongoMemoryServer.create();
+    process.env.DB_TEST_URI = mongoServer.getUri();
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -21,7 +26,8 @@ describe('appController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close();
+    await mongoServer.stop();
   });
 });
