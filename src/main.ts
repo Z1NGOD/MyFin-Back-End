@@ -20,10 +20,7 @@ async function bootstrap() {
     .setVersion(pkgJsonVersion)
     .build();
 
-  // const document = SwaggerModule.createDocument(app, config);
-  const document = SwaggerModule.createDocument(app, config, {
-    ignoreGlobalPrefix: true,
-  });
+  const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api-docs', app, document);
 
@@ -45,4 +42,5 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
+
 bootstrap();

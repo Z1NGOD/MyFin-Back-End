@@ -1,4 +1,5 @@
 import { Test, type TestingModule } from '@nestjs/testing';
+import { BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 describe('authService', () => {
@@ -14,5 +15,22 @@ describe('authService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should return dto', () => {
+    const userMock = {
+      firstName: 'string',
+      lastName: 'string',
+      email: 'string@gmail.com',
+      password: 'Q*123qw231eqw23e132qwe',
+    };
+
+    expect(service.registration(userMock)).toBe(userMock);
+  });
+
+  it('should throw an error', () => {
+    expect(() => service.registration(null)).toThrow(
+      new BadRequestException('Bad request'),
+    );
   });
 });

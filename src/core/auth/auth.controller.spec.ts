@@ -28,7 +28,7 @@ describe('authController', () => {
       password: 'Q*123qw231eqw23e132qwe',
     };
 
-    jest.spyOn(authService, 'registration'); // Створюємо мок для методу registration
+    jest.spyOn(authService, 'registration');
     controller.registration(userMock);
 
     expect(authService.registration).toHaveBeenCalled();
