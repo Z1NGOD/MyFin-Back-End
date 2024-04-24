@@ -30,5 +30,3 @@ jobs:
         run: npm run test:cov
       - name: Checkception - Run action locally with its own coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
