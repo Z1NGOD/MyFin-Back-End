@@ -1,5 +1,5 @@
 import { Test, type TestingModule } from '@nestjs/testing';
-import { type INestApplication } from '@nestjs/common';
+import { ValidationPipe, type INestApplication } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
@@ -17,15 +17,38 @@ describe('appController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
-  it('should return "Hello World"(GET)', async () => {
+  it('/POST registration successfull', async () => {
+    const userMock = {
+      firstName: 'string',
+      lastName: 'string',
+      email: 'string@gmail.com',
+      password: 'Q*123qw231eqw23e132qwe',
+    };
+
     return await request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .post('/auth/registration')
+      .send(userMock)
+      .expect(201)
+      .expect(userMock);
   });
+
+  it('/POST registration failed', async () => {
+    const userMock = {
+      lastName: '',
+      email: 'string',
+      password: '1232qwe',
+    };
+
+    return await request(app.getHttpServer())
+      .post('/auth/registration')
+      .send(userMock)
+      .expect(400);
+  });
+
   afterAll(async () => {
     await app.close();
     await mongoServer.stop();

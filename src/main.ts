@@ -12,15 +12,17 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
+  app.setGlobalPrefix('api/v1', { exclude: ['api-docs'] });
+
   const config = new DocumentBuilder()
     .setTitle(pkgName)
     .setDescription(pkgDescription)
     .setVersion(pkgJsonVersion)
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
 
-  app.setGlobalPrefix('api/v1', { exclude: ['api-docs'] });
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('api-docs', app, document);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -34,10 +36,10 @@ async function bootstrap() {
     }),
   );
 
-  // Security
   app.use(helmet());
   app.enableCors();
 
   await app.listen(3000);
 }
+
 bootstrap();
