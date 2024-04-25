@@ -1,7 +1,7 @@
 import { Controller, Body, Post, HttpStatus } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
-import { CheckUserDto, CreateUserDto } from '../dto';
+import { LoginUserDto, CreateUserDto } from '../dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -22,7 +22,7 @@ export class AuthController {
     return this.authService.registration(createUserDto);
   }
 
-  @ApiBody({ type: CheckUserDto })
+  @ApiBody({ type: LoginUserDto })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'User logged in',
@@ -32,7 +32,7 @@ export class AuthController {
     description: 'User was not found',
   })
   @Post('login')
-  login(@Body() checkUserDto: CheckUserDto) {
-    return this.authService.login(checkUserDto);
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto);
   }
 }

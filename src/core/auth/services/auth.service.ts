@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CheckUserDto, CreateUserDto } from '../dto';
+import { LoginUserDto, CreateUserDto } from '../dto';
 
 @Injectable()
 export class AuthService {
@@ -10,10 +10,10 @@ export class AuthService {
     return createUserDto;
   }
 
-  login(checkUserDto: CheckUserDto) {
-    if (!checkUserDto) {
+  login(loginUserDto: LoginUserDto) {
+    if (!loginUserDto) {
       throw new BadRequestException('Bad request');
     }
-    return checkUserDto;
+    return loginUserDto;
   }
 }
