@@ -17,7 +17,7 @@ describe('authService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return dto', () => {
+  it('should return createUserDto', () => {
     const userMock = {
       firstName: 'string',
       lastName: 'string',
@@ -28,8 +28,25 @@ describe('authService', () => {
     expect(service.registration(userMock)).toBe(userMock);
   });
 
-  it('should throw an error', () => {
-    expect(() => service.registration(null)).toThrow(
+  it('should throw an error on empty registration data', () => {
+    const emptyUser = undefined;
+    expect(() => service.registration(emptyUser)).toThrow(
+      new BadRequestException('Bad request'),
+    );
+  });
+
+  it('should return checkUserDto', () => {
+    const userMock = {
+      email: 'string@gmail.com',
+      password: 'Q*123qw231eqw23e132qwe',
+    };
+
+    expect(service.login(userMock)).toBe(userMock);
+  });
+
+  it('should throw an error on empty login data', () => {
+    const emptyUser = undefined;
+    expect(() => service.login(emptyUser)).toThrow(
       new BadRequestException('Bad request'),
     );
   });

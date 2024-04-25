@@ -40,6 +40,21 @@ describe('appController (e2e)', () => {
     expect(response.body).toHaveProperty('password', userMock.password);
   });
 
+  it('/POST login successfull', async () => {
+    const userMock = {
+      email: 'string@gmail.com',
+      password: 'Q*123qw231eqw23e132qwe',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send(userMock)
+      .expect(201);
+
+    expect(response.body).toHaveProperty('email', userMock.email);
+    expect(response.body).toHaveProperty('password', userMock.password);
+  });
+
   it('/POST registration failed', async () => {
     const userMock = {
       lastName: '',
@@ -56,6 +71,23 @@ describe('appController (e2e)', () => {
       'firstName must be a string',
       'firstName should not be empty',
       'lastName should not be empty',
+      'email must be an email',
+      'password is not strong enough',
+    ]);
+  });
+
+  it('/POST login failed', async () => {
+    const userMock = {
+      email: 'string',
+      password: '1232qwe',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send(userMock)
+      .expect(400);
+
+    expect(response.body).toHaveProperty('message', [
       'email must be an email',
       'password is not strong enough',
     ]);
