@@ -29,11 +29,15 @@ describe('appController (e2e)', () => {
       password: 'Q*123qw231eqw23e132qwe',
     };
 
-    return await request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .post('/auth/registration')
       .send(userMock)
-      .expect(201)
-      .expect(userMock);
+      .expect(201);
+
+    expect(response.body).toHaveProperty('firstName', userMock.firstName);
+    expect(response.body).toHaveProperty('lastName', userMock.lastName);
+    expect(response.body).toHaveProperty('email', userMock.email);
+    expect(response.body).toHaveProperty('password', userMock.password);
   });
 
   it('/POST registration failed', async () => {
@@ -43,10 +47,18 @@ describe('appController (e2e)', () => {
       password: '1232qwe',
     };
 
-    return await request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .post('/auth/registration')
       .send(userMock)
       .expect(400);
+
+    expect(response.body).toHaveProperty('message', [
+      'firstName must be a string',
+      'firstName should not be empty',
+      'lastName should not be empty',
+      'email must be an email',
+      'password is not strong enough',
+    ]);
   });
 
   afterAll(async () => {
