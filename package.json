@@ -25,7 +25,8 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.module.ts",
-      "!**/main.ts"
+      "!**/main.ts",
+      "!**/*.dto.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
