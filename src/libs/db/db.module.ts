@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRootAsync({
       useFactory: () => ({
         uri: process.env.DB_URI,
-        retryAttempts: 5,
+        retryAttempts: 2,
         retryDelay: 2000,
       }),
     }),

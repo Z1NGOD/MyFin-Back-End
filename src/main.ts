@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   version as pkgJsonVersion,
   description as pkgDescription,
@@ -39,7 +40,9 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors();
 
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT');
+  await app.listen(port);
 }
 
 bootstrap();
