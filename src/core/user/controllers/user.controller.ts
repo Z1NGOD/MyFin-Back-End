@@ -12,7 +12,7 @@ import { UpdateUserDto } from '../dto';
 import { UserService } from '../services/user.service';
 
 @ApiTags('User')
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -20,21 +20,19 @@ export class UserController {
     status: HttpStatus.OK,
     description: 'Find all Users',
   })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Not finded Users',
-  })
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
+  // @ReturnType (UserResponseDto) изменять дто на UserResponseDto БЕЗ ПАРОЛЯ!
+  // использовать внутри дто @Expose library Class-Transformer
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Find one user by id',
   })
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Can not find this user by id!',
   })
   @Get(':_id')
@@ -57,12 +55,12 @@ export class UserController {
   }
 
   @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Find one user by id',
+    status: HttpStatus.NO_CONTENT,
+    description: 'Deleted user by id',
   })
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Can not find this user by id!',
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Can not deleted this user by id!',
   })
   @Delete(':_id')
   remove(@Param('_id') _id: string) {
