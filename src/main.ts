@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   version as pkgJsonVersion,
@@ -41,8 +41,11 @@ async function bootstrap() {
   app.enableCors();
 
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('PORT');
-  await app.listen(port);
+  const port = configService.get<string>('PORT');
+  const host = configService.get<string>('HOST');
+  await app.listen(port, '', () => {
+    Logger.log(`Server is running on: http://${host}:${port}`);
+  });
 }
 
 bootstrap();
