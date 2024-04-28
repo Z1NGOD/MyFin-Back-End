@@ -6,9 +6,12 @@ import {
   Delete,
   Patch,
   HttpStatus,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UpdateUserDto } from '../dto';
+import { User } from '@libs/db/models';
+import { UpdateUserDto, UserResponseDto } from '../dto';
 import { UserService } from '../services/user.service';
 
 @ApiTags('User')
@@ -25,8 +28,6 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  // @ReturnType (UserResponseDto) изменять дто на UserResponseDto БЕЗ ПАРОЛЯ!
-  // использовать внутри дто @Expose library Class-Transformer
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Find one user by id',
@@ -35,9 +36,10 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Can not find this user by id!',
   })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':_id')
-  findOne(@Param('_id') _id: string) {
-    return this.userService.findOne(_id);
+  async findOne(@Param('_id') _id: string) {
+    return this.transfomUser(_id, await this.userService.findOne(_id));
   }
 
   @ApiBody({ type: UpdateUserDto })
@@ -65,5 +67,10 @@ export class UserController {
   @Delete(':_id')
   remove(@Param('_id') _id: string) {
     return this.userService.remove(_id);
+  }
+
+  private transfomUser(userId: string, user: User): UserResponseDto {
+    const { firstName, lastName, email } = user;
+    return new UserResponseDto({ _id: userId, firstName, lastName, email });
   }
 }
