@@ -43,8 +43,12 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT');
   const host = configService.get<string>('HOST');
+  const redisHost = configService.get<string>('redis.host');
+  const redisPort = configService.get<string>('redis.port');
   await app.listen(port, '', () => {
     Logger.log(`Server is running on: http://${host}:${port}`);
+    Logger.log(`Swagger is running on: http://${host}:${port}/api-docs`);
+    Logger.log(`REDIS is running on: http://${redisHost}:${redisPort}`);
   });
 }
 
