@@ -1,1 +1,2 @@
-export const JWT_STRATEGY_NAME = 'jwt';
+export const ACCESS_STRATEGY_NAME = 'access-token-strategy';
+export const REFRESH_STRATEGY_NAME = 'refresh-token-strategy';
