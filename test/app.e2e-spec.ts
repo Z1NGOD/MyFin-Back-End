@@ -2,6 +2,8 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { ValidationPipe, type INestApplication } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as request from 'supertest';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisModule } from '../src/libs/redis/redis.module';
 import { AppModule } from '../src/app.module';
 
 describe('appController (e2e)', () => {
@@ -13,8 +15,15 @@ describe('appController (e2e)', () => {
     process.env.DB_URI = mongoServer.getUri();
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+      imports: [AppModule, RedisModule],
+    })
+      .overrideModule(RedisModule)
+      .useModule(
+        CacheModule.register({
+          ttl: 100,
+        }),
+      )
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());

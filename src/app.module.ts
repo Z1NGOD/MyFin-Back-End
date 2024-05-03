@@ -4,6 +4,7 @@ import { redisConfig } from './libs/redis/configs/redis.config';
 import { DbModule } from './libs/db/db.module';
 import { AuthModule } from './core/auth/auth.module';
 import { RedisModule } from './libs/redis/redis.module';
+import { CachingModule } from './libs/cache/caching.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { RedisModule } from './libs/redis/redis.module';
     DbModule,
     AuthModule,
     RedisModule,
+    CachingModule,
   ],
 })
 export class AppModule {}
