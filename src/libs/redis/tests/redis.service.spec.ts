@@ -1,7 +1,7 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { type RedisClient } from './redis.provider';
-import { RedisService } from './redis.service';
+import { type RedisClient } from '../providers/redis.provider';
+import { RedisService } from '../services/redis.service';
 
 const redisMockObject = {
   disconnect: jest.fn(),
