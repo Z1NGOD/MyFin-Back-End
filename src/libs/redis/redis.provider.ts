@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import type { Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 

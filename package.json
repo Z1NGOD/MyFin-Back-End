@@ -28,7 +28,8 @@
       "!**/main.ts",
       "!**/*.dto.ts",
       "!**/*.config.ts",
-      "!**/*.provider.ts"
+      "!**/*.provider.ts",
+      "!**/*.constants.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
