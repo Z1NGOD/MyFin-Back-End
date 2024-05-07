@@ -7,7 +7,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RefreshTokenAuthGuard } from '@libs/security';
+import { RefreshTokenAuthGuard } from '../../../libs/security';
 import { AuthService } from '../services/auth.service';
 import { LoginUserDto, CreateUserDto } from '../dto';
 
