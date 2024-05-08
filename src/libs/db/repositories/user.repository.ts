@@ -28,6 +28,10 @@ export class UserRepository {
     return this.UserModel.findOne({ _id }).exec();
   }
 
+  findByEmail(email: string): Promise<User> {
+    return this.UserModel.findOne({ email }).exec();
+  }
+
   update(_id: string, updateUserDto: UserContext): Promise<User> {
     return this.UserModel.findOneAndUpdate({ _id }, updateUserDto, {
       new: true,

@@ -20,7 +20,7 @@ export class TokenService {
   //   return this.jwtService.decode(token);
   // }
 
-  // verify(token: string): object {
-  //   return this.jwtService.verify(token);
-  // }
+  verify(token: string): object {
+    return this.jwtService.verify(token);
+  }
 }
