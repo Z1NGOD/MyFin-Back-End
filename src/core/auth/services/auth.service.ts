@@ -1,19 +1,37 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { TokenService } from '../../../libs/security/services';
 import { LoginUserDto, CreateUserDto } from '../dto';
 
 @Injectable()
 export class AuthService {
-  registration(createUserDto: CreateUserDto) {
-    if (!createUserDto) {
+  constructor(private readonly tokenService: TokenService) {}
+
+  async registration(userDto: CreateUserDto) {
+    if (!userDto) {
       throw new BadRequestException('Bad request');
     }
-    return createUserDto;
+    const payload = { sub: userDto };
+    const accessToken = await this.tokenService.createAccessToken(payload);
+    const refreshToken = await this.tokenService.createRefreshToken(payload);
+
+    return { ...userDto, accessToken, refreshToken };
   }
 
-  login(loginUserDto: LoginUserDto) {
-    if (!loginUserDto) {
+  async login(userDto: LoginUserDto) {
+    if (!userDto) {
       throw new BadRequestException('Bad request');
     }
-    return loginUserDto;
+    const payload = { sub: userDto };
+    const accessToken = await this.tokenService.createAccessToken(payload);
+    const refreshToken = await this.tokenService.createRefreshToken(payload);
+
+    return { ...userDto, accessToken, refreshToken };
+  }
+
+  async validateRefreshToken(userDto: LoginUserDto) {
+    const payload = { sub: userDto };
+    const accessToken = await this.tokenService.createAccessToken(payload);
+
+    return { accessToken };
   }
 }
