@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { TokenService } from './services';
 import { AccessTokenStrategy } from './strategies';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
+import { PasswordService } from './services/password.service';
 
 @Module({
   imports: [
@@ -15,7 +16,12 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
       inject: [ConfigService],
     }),
   ],
-  providers: [TokenService, AccessTokenStrategy, RefreshTokenStrategy],
-  exports: [TokenService],
+  providers: [
+    TokenService,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
+    PasswordService,
+  ],
+  exports: [TokenService, PasswordService],
 })
 export class SecurityModule {}
