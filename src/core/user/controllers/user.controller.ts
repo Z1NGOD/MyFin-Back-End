@@ -8,9 +8,11 @@ import {
   HttpStatus,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@libs/db/models';
+import { AccessTokenAuthGuard } from '@libs/security';
 import { UpdateUserDto, UserResponseDto } from '../dto';
 import { UserService } from '../services/user.service';
 
@@ -23,6 +25,7 @@ export class UserController {
     status: HttpStatus.OK,
     description: 'Find all Users',
   })
+  @UseGuards(AccessTokenAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 // import { Model } from 'mongoose';
 // import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from '@core/auth/dto';
-import { User } from '@libs/db/models/user.schema';
 import { UserRepository } from '@libs/db/repositories/user.repository';
 import { UpdateUserDto } from '../dto';
 
@@ -14,19 +13,19 @@ export class UserService {
     return this.userRepository.create(createUserDto);
   }
 
-  findAll(): Promise<User[]> {
+  findAll() {
     return this.userRepository.findAll();
   }
 
-  findOne(_id: string): Promise<User> {
+  findOne(_id: string) {
     return this.userRepository.findOne(_id);
   }
 
-  findByEmail(email: string): Promise<User> {
+  findByEmail(email: string) {
     return this.userRepository.findByEmail(email);
   }
 
-  update(_id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  update(_id: string, updateUserDto: UpdateUserDto) {
     return this.userRepository.update(_id, updateUserDto);
   }
 
