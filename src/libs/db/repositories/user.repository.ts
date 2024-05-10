@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '@libs/db/models/user.schema';
+import { User, UserDocument } from '@libs/db/models/user.schema';
 
 interface UserContext {
   firstName: string;
@@ -20,19 +20,19 @@ export class UserRepository {
     return createdUser.save();
   }
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserDocument[]> {
     return this.UserModel.find().exec();
   }
 
-  findOne(_id: string): Promise<User> {
+  findOne(_id: string): Promise<UserDocument> {
     return this.UserModel.findOne({ _id }).exec();
   }
 
-  findByEmail(email: string): Promise<User> {
+  findByEmail(email: string): Promise<UserDocument> {
     return this.UserModel.findOne({ email }).exec();
   }
 
-  update(_id: string, updateUserDto: UserContext): Promise<User> {
+  update(_id: string, updateUserDto: UserContext): Promise<UserDocument> {
     return this.UserModel.findOneAndUpdate({ _id }, updateUserDto, {
       new: true,
     });

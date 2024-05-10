@@ -46,8 +46,9 @@ export class AuthController {
   @UseGuards(RefreshTokenAuthGuard)
   @Post('updateAccessToken')
   updateAccessToken(
-    @Request() req: { refreshToken: string; user: LoginUserDto },
+    @Request() req: { user: LoginUserDto },
+    @Body('refreshToken') refreshToken: string,
   ) {
-    return this.authService.validateRefreshToken(req.refreshToken, req.user);
+    return this.authService.validateRefreshToken(refreshToken, req.user);
   }
 }
