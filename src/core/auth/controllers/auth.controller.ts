@@ -7,7 +7,10 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RefreshTokenAuthGuard } from '../../../libs/security';
+import {
+  AccessTokenAuthGuard,
+  RefreshTokenAuthGuard,
+} from '../../../libs/security';
 import { AuthService } from '../services/auth.service';
 import { LoginUserDto, CreateUserDto } from '../dto';
 
@@ -50,5 +53,10 @@ export class AuthController {
     @Body('refreshToken') refreshToken: string,
   ) {
     return this.authService.validateRefreshToken(refreshToken, req.user);
+  }
+  @UseGuards(AccessTokenAuthGuard)
+  @Post('logout')
+  logout(@Body() tokens: { refreshToken: string; accessToken: string }) {
+    this.authService.logout(tokens.refreshToken, tokens.accessToken);
   }
 }

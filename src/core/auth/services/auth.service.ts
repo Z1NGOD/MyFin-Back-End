@@ -3,8 +3,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserService } from '../../user/services';
-import { TokenService } from '../../../libs/security/services';
+import { ConfigService } from '@nestjs/config';
+import { UserService } from '@core/user/services';
+import { TokenService } from '@libs/security/services';
+import { RedisService } from '@libs/redis/services/redis.service';
 import { LoginUserDto, CreateUserDto } from '../dto';
 
 @Injectable()
@@ -12,6 +14,8 @@ export class AuthService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
+    private readonly redisService: RedisService,
+    private readonly config: ConfigService,
   ) {}
 
   async registration(userDto: CreateUserDto) {
@@ -44,6 +48,19 @@ export class AuthService {
     const tokens = await this.createTokens(payload);
 
     return { user, ...tokens };
+  }
+
+  logout(refreshToken: string, accessToken: string) {
+    this.redisService.setTokenToBlacklist(
+      accessToken,
+      this.config.get<number>('ACCESS_EXPIRE_TIME') / 1000,
+    );
+    this.redisService.setTokenToBlacklist(
+      refreshToken,
+      this.config.get<number>('REFRESH_EXPIRE_TIME') / 1000,
+    );
+
+    return true;
   }
 
   async validateRefreshToken(refreshToken: string, userDto: LoginUserDto) {
