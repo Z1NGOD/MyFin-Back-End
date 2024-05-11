@@ -7,9 +7,11 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RefreshTokenAuthGuard } from '../../../libs/security';
+import { AccessTokenAuthGuard, RefreshTokenAuthGuard } from '@libs/security';
 import { AuthService } from '../services/auth.service';
 import { LoginUserDto, CreateUserDto } from '../dto';
+import { RequestUser } from '../interfaces';
+import { TokensDto } from '../dto/tokens.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -43,12 +45,37 @@ export class AuthController {
   login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
+
+  @ApiBody({ type: RequestUser })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Access Token was refreshed successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'User is unauthorized',
+  })
   @UseGuards(RefreshTokenAuthGuard)
   @Post('updateAccessToken')
   updateAccessToken(
-    @Request() req: { user: LoginUserDto },
+    @Request() req: { user: RequestUser },
     @Body('refreshToken') refreshToken: string,
   ) {
-    return this.authService.validateRefreshToken(refreshToken, req.user);
+    return this.authService.updateAccessToken(refreshToken, req.user);
+  }
+
+  @ApiBody({ type: TokensDto })
+  @ApiResponse({
+    status: HttpStatus.I_AM_A_TEAPOT,
+    description: 'User became a teapot',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'User is unauthorized',
+  })
+  @UseGuards(AccessTokenAuthGuard)
+  @Post('logout')
+  logout(@Body() tokens: TokensDto) {
+    this.authService.logout(tokens.refreshToken, tokens.accessToken);
   }
 }

@@ -20,26 +20,8 @@ export class RedisService {
   async del(key: string) {
     return await this.redis.del(key);
   }
-  async setToken(value: string, exparation: number, userEmail: string) {
-    return await this.redis.set(
-      `tokenFor${userEmail}`,
-      value,
-      'EX',
-      exparation,
-    );
-  }
-  async getToken(userEmail: string) {
-    return await this.redis.get(`tokenFor${userEmail}`);
-  }
-  async setRefreshToken(value: string, exparation: number, userEmail: string) {
-    return await this.redis.set(
-      `refreshTokenFor${userEmail}`,
-      value,
-      'EX',
-      exparation,
-    );
-  }
-  async getRefreshToken(userEmail: string) {
-    return await this.redis.get(`refreshTokenFor${userEmail}`);
+
+  async setTokenToBlacklist(token: string, expiration: number) {
+    return await this.redis.set(token, 'true', 'EX', expiration);
   }
 }

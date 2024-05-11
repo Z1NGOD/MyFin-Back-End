@@ -3,15 +3,20 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserService } from '../../user/services';
-import { TokenService } from '../../../libs/security/services';
+import { ConfigService } from '@nestjs/config';
+import { UserService } from '@core/user/services';
+import { TokenService } from '@libs/security/services';
+import { RedisService } from '@libs/redis/services/redis.service';
 import { LoginUserDto, CreateUserDto } from '../dto';
+import { RequestUser } from '../interfaces';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
+    private readonly redisService: RedisService,
+    private readonly config: ConfigService,
   ) {}
 
   async registration(userDto: CreateUserDto) {
@@ -46,11 +51,24 @@ export class AuthService {
     return { user, ...tokens };
   }
 
-  async validateRefreshToken(refreshToken: string, userDto: LoginUserDto) {
+  logout(refreshToken: string, accessToken: string) {
+    this.redisService.setTokenToBlacklist(
+      accessToken,
+      this.config.get<number>('ACCESS_EXPIRE_TIME') / 1000,
+    );
+    this.redisService.setTokenToBlacklist(
+      refreshToken,
+      this.config.get<number>('REFRESH_EXPIRE_TIME') / 1000,
+    );
+
+    return true;
+  }
+
+  async updateAccessToken(refreshToken: string, user: RequestUser) {
     if (!refreshToken) {
       throw new BadRequestException('No refresh token');
     }
-    const payload = { sub: userDto };
+    const payload = { sub: user.id, email: user.email };
     const accessToken = await this.tokenService.createAccessToken(payload);
 
     return { accessToken };

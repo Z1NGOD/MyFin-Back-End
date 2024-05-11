@@ -11,13 +11,13 @@ export class TokenService {
 
   async createAccessToken<T>(payload: { sub: T }): Promise<string> {
     return await this.jwtService.signAsync(payload, {
-      expiresIn: '3h',
+      expiresIn: this.config.get<string>('ACCESS_EXPIRE_TIME'),
       secret: this.config.get<string>('ACCESS_SECRET'),
     });
   }
   async createRefreshToken<T>(payload: { sub: T }): Promise<string> {
     return await this.jwtService.signAsync(payload, {
-      expiresIn: '7d',
+      expiresIn: this.config.get<string>('REFRESH_EXPIRE_TIME'),
       secret: this.config.get<string>('REFRESH_SECRET'),
     });
   }

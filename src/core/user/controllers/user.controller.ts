@@ -54,6 +54,7 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Some property is wrong',
   })
+  @UseGuards(AccessTokenAuthGuard)
   @Patch(':_id')
   update(@Param('_id') _id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(_id, updateUserDto);
@@ -67,6 +68,7 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Can not deleted this user by id!',
   })
+  @UseGuards(AccessTokenAuthGuard)
   @Delete(':_id')
   remove(@Param('_id') _id: string) {
     return this.userService.remove(_id);
