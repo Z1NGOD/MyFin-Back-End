@@ -21,7 +21,7 @@ export class RedisService {
     return await this.redis.del(key);
   }
 
-  async setTokenToBlacklist(token: string, exparation: number) {
-    return await this.redis.set(token, 'true', 'EX', exparation);
+  async setTokenToBlacklist(token: string, expiration: number) {
+    return await this.redis.set(token, 'true', 'EX', expiration);
   }
 }

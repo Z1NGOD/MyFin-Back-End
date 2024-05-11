@@ -31,9 +31,9 @@ export class AccessTokenStrategy extends PassportStrategy(
   }
   async validate(req: Request, payload: JwtPayload) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-    const blacklistToken = await this.redis.get(token);
+    const isTokenInBlacklist = await this.redis.get(token);
 
-    if (blacklistToken) {
+    if (isTokenInBlacklist) {
       throw new UnauthorizedException('Token already in blacklist');
     }
 

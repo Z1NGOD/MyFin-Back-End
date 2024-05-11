@@ -31,9 +31,9 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
   async validate(req: Request, payload: JwtPayload) {
     const token = ExtractJwt.fromBodyField('refreshToken')(req);
-    const blacklistToken = await this.redis.get(token);
+    const isTokenInBlacklist = await this.redis.get(token);
 
-    if (blacklistToken) {
+    if (isTokenInBlacklist) {
       throw new UnauthorizedException('Token already in blacklist');
     }
     const user = await this.userRepository.findOne(payload.sub);
