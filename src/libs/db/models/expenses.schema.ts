@@ -24,4 +24,4 @@ export class Expense {
   details: string;
 }
 
-export const ExpencesesSchema = SchemaFactory.createForClass(Expense);
+export const ExpensesSchema = SchemaFactory.createForClass(Expense);
