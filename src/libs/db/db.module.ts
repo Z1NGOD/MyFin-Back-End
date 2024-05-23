@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CurrencyMigration } from './migrations/currency.migration';
 import { Category, CategorySchema } from './models/category.schema';
 import { Currency, CurrencySchema } from './models/currency.schema';
 import { ExpensesSchema, Expense } from './models/expenses.schema';
@@ -19,6 +20,7 @@ import { ExpensesSchema, Expense } from './models/expenses.schema';
       { name: Expense.name, schema: ExpensesSchema },
     ]),
   ],
+  providers: [CurrencyMigration],
   exports: [MongooseModule],
 })
 export class DbModule {}
