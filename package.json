@@ -30,8 +30,8 @@
       "!**/*.config.ts",
       "!**/*.provider.ts",
       "!**/*.constants.ts",
-      "!**/*.migration.data.ts",
-      "!**/*.migration.ts",
+      "!**/*.seed.data.ts",
+      "!**/*.seed.ts",
       "!**/*.schema.ts",
       "!**/*index.ts",
       "!**/*.repository.ts"
