@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Category, CategorySchema } from './models/category.schema';
 import { Currency, CurrencySchema } from './models/currency.schema';
 import { ExpensesSchema, Expense } from './models/expenses.schema';
-import { CategoryMigration, CurrencyMigration } from './seeds';
+import { CategoryMigration, CurrencyMigration } from './migrations';
 
 @Module({
   imports: [
