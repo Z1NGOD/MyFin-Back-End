@@ -31,7 +31,7 @@
       "!**/*.provider.ts",
       "!**/*.constants.ts",
       "!**/*.seed.data.ts",
-      "!**/*.seed.ts",
+      "!**/*.migration.ts",
       "!**/*.schema.ts",
       "!**/*index.ts",
       "!**/*.repository.ts"
