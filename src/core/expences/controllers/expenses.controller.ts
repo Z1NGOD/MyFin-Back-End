@@ -20,11 +20,15 @@ export class ExpensesController {
   @ApiBody({ type: [CreateExpenseDto] })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Found',
+    description: 'Successfully retrieved all expenses',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Not Found',
+    description: 'No expenses found',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
   })
   @Get()
   findAll() {
@@ -34,11 +38,15 @@ export class ExpensesController {
   @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Found',
+    description: 'Successfully retrieved the expense',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Not Found',
+    description: 'Expense not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -48,41 +56,52 @@ export class ExpensesController {
   @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Created successfully',
+    description: 'Expense created successfully',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Cant create',
+    description: 'Invalid request body',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
   })
   @Post('create')
   create(@Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.create(createExpenseDto);
   }
 
-  @ApiBody({ type: CreateExpenseDto })
+  @ApiBody({ type: UpdateExpenseDto })
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'Updated successfully',
+    status: HttpStatus.OK,
+    description: 'Expense updated successfully',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Cant update',
+    description: 'Invalid request body or expense not found',
   })
-  @Patch('update:id')
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+  })
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
     return this.expensesService.update(id, updateExpenseDto);
   }
 
-  @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Deleted successfully',
+    description: 'Expense deleted successfully',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Was not possible',
+    description: 'Invalid expense ID or expense not found',
   })
-  @Delete('delete:id')
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+  })
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.expensesService.remove(id);
   }
