@@ -29,7 +29,12 @@
       "!**/*.dto.ts",
       "!**/*.config.ts",
       "!**/*.provider.ts",
-      "!**/*.constants.ts"
+      "!**/*.constants.ts",
+      "!**/*.migration.data.ts",
+      "!**/*.migration.ts",
+      "!**/*.schema.ts",
+      "!**/*index.ts",
+      "!**/*.repository.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {

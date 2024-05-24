@@ -71,7 +71,7 @@ export class ExpensesController {
   })
   @Patch('update:id')
   update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
-    this.expensesService.update(id, updateExpenseDto);
+    return this.expensesService.update(id, updateExpenseDto);
   }
 
   @ApiBody({ type: CreateExpenseDto })
