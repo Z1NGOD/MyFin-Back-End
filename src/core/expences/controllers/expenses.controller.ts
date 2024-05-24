@@ -20,7 +20,7 @@ export class ExpensesController {
 
   @ApiBody({ type: [CreateExpenseDto] })
   @ApiResponse({
-    status: HttpStatus.FOUND,
+    status: HttpStatus.OK,
     description: 'Found',
   })
   @ApiResponse({
@@ -34,7 +34,7 @@ export class ExpensesController {
 
   @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
-    status: HttpStatus.FOUND,
+    status: HttpStatus.OK,
     description: 'Found',
   })
   @ApiResponse({
