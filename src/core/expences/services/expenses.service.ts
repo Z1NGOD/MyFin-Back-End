@@ -5,6 +5,7 @@ import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 @Injectable()
 export class ExpensesService {
   constructor(private readonly expenseRepository: ExpenseRepository) {}
+
   create(createExpenseDto: CreateExpenseDto) {
     return this.expenseRepository.create(createExpenseDto);
   }
