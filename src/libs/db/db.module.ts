@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CurrencyMigration } from './migrations/currency.migration';
 import { Category, CategorySchema } from './models/category.schema';
 import { Currency, CurrencySchema } from './models/currency.schema';
 import { ExpensesSchema, Expense } from './models/expenses.schema';
-import { CategoryMigration } from './migrations/category.migration';
+import { CategoryMigration, CurrencyMigration } from './seeds';
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category } from '../models/category.schema';
-import { categoryDataJson } from '../data/category.migration.data';
+import { categoryDataJson } from '../data/category.seed.data';
 
 @Injectable()
 export class CategoryMigration implements OnModuleInit {

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateExpenseDto } from '@core/expences/dto/update-expense.dto';
-import { CreateExpenseDto } from '@core/expences/dto/create-expense.dto';
-import { Expense, ExpensesDocument } from '../models/expenses.schema';
+import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
+import { Expense } from '../models';
+import { ExpensesDocument } from '../models/expenses.schema';
 
 @Injectable()
 export class ExpenseRepository {
@@ -20,23 +20,23 @@ export class ExpenseRepository {
     return this.ExpenseModel.find().exec();
   }
 
-  async findById(_id: string): Promise<ExpensesDocument> {
-    return this.ExpenseModel.findById(_id);
+  async findById(id: string): Promise<ExpensesDocument> {
+    return this.ExpenseModel.findById(id);
   }
 
   async update(
-    _id: string,
+    id: string,
     updateExpenseDto: UpdateExpenseDto,
   ): Promise<ExpensesDocument> {
     const updatedExpense = this.ExpenseModel.findByIdAndUpdate(
-      _id,
+      id,
       updateExpenseDto,
       { new: true },
     );
     return updatedExpense;
   }
 
-  async delete(_id: string) {
-    return this.ExpenseModel.findByIdAndDelete(_id);
+  async delete(id: string) {
+    return this.ExpenseModel.findByIdAndDelete(id);
   }
 }

@@ -1,8 +1,7 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { ExpensesController } from '../controllers/expenses.controller';
 import { ExpensesService } from '../services/expenses.service';
-import { type CreateExpenseDto } from '../dto/create-expense.dto';
-import { type UpdateExpenseDto } from '../dto/update-expense.dto';
+import { type CreateExpenseDto, type UpdateExpenseDto } from '../dto';
 
 describe('expensesController', () => {
   let controller: ExpensesController;

@@ -10,8 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ExpensesService } from '../services/expenses.service';
-import { CreateExpenseDto } from '../dto/create-expense.dto';
-import { UpdateExpenseDto } from '../dto/update-expense.dto';
+import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 
 @ApiTags('Expenses')
 @Controller('expenses')
