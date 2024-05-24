@@ -7,8 +7,10 @@ export type CurrenciesDocument = HydratedDocument<Currency>;
 export class Currency {
   @Prop()
   details: string;
+
   @Prop()
   symbol: string;
+
   @Prop()
   exchangeRate: number;
 }
