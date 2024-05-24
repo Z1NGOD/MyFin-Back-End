@@ -6,7 +6,6 @@ import { DbModule } from './libs/db/db.module';
 import { AuthModule } from './core/auth/auth.module';
 import { RedisModule } from './libs/redis/redis.module';
 import { CachingModule } from './libs/cache/caching.module';
-import { CurrencyModule } from './core/currency/currency.module';
 
 @Module({
   imports: [
@@ -16,7 +15,6 @@ import { CurrencyModule } from './core/currency/currency.module';
     RedisModule,
     CachingModule,
     ExpensesModule,
-    CurrencyModule,
   ],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Currency } from '@libs/db/models/currency.schema';
-import { migrationDataJson } from '../data/migration';
+import { migrationDataJson } from '../data/currency.migration.data';
 
 @Injectable()
 export class CurrencyMigration implements OnModuleInit {

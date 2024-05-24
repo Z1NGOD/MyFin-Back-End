@@ -4,6 +4,7 @@ import { CurrencyMigration } from './migrations/currency.migration';
 import { Category, CategorySchema } from './models/category.schema';
 import { Currency, CurrencySchema } from './models/currency.schema';
 import { ExpensesSchema, Expense } from './models/expenses.schema';
+import { CategoryMigration } from './migrations/category.migration';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { ExpensesSchema, Expense } from './models/expenses.schema';
       { name: Expense.name, schema: ExpensesSchema },
     ]),
   ],
-  providers: [CurrencyMigration],
+  providers: [CurrencyMigration, CategoryMigration],
   exports: [MongooseModule],
 })
 export class DbModule {}
