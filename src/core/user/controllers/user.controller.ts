@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@libs/db/models';
+import * as schemas from '@libs/db/models';
 import { AccessTokenAuthGuard } from '@libs/security';
 import { UpdateUserDto, UserResponseDto } from '../dto';
 import { UserService } from '../services/user.service';
@@ -74,7 +74,10 @@ export class UserController {
     return this.userService.remove(_id);
   }
 
-  private transfomUser(userId: string, user: User): UserResponseDto {
+  private transfomUser(
+    userId: string,
+    user: schemas.User.User,
+  ): UserResponseDto {
     const { firstName, lastName, email } = user;
     return new UserResponseDto({ _id: userId, firstName, lastName, email });
   }

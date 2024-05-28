@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ExpensesModule } from './core/expences/expenses.module';
 import { redisConfig } from './libs/redis/configs/redis.config';
 import { DbModule } from './libs/db/db.module';
 import { AuthModule } from './core/auth/auth.module';
@@ -15,6 +16,7 @@ import { UserModule } from './core/user/user.module';
     RedisModule,
     CachingModule,
     UserModule,
+    ExpensesModule,
   ],
 })
 export class AppModule {}

@@ -29,7 +29,12 @@
       "!**/*.dto.ts",
       "!**/*.config.ts",
       "!**/*.provider.ts",
-      "!**/*.constants.ts"
+      "!**/*.constants.ts",
+      "!**/*.seed.ts",
+      "!**/*.migration.ts",
+      "!**/*.schema.ts",
+      "!**/*index.ts",
+      "!**/*.repository.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
@@ -71,9 +76,9 @@
     "helmet": "^7.1.0",
     "ioredis": "^5.4.1",
     "mongodb-memory-server": "^9.2.0",
-    "mongoose": "^8.3.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "mongoose": "^8.3.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

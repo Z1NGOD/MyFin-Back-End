@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './models';
-import { UserRepository } from './repositories/user.repository';
+import * as schemas from './models';
+import * as repositories from './repositories';
+import { CategoryMigration, CurrencyMigration } from './migrations';
 
 @Module({
   imports: [
@@ -12,9 +13,36 @@ import { UserRepository } from './repositories/user.repository';
         retryDelay: 2000,
       }),
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+
+    MongooseModule.forFeature([
+      {
+        name: schemas.User.User.name,
+        schema: schemas.User.UserSchema,
+      },
+      {
+        name: schemas.Category.Category.name,
+        schema: schemas.Category.CategorySchema,
+      },
+      {
+        name: schemas.Currency.Currency.name,
+        schema: schemas.Currency.CurrencySchema,
+      },
+      {
+        name: schemas.Expense.Expense.name,
+        schema: schemas.Expense.ExpensesSchema,
+      },
+    ]),
   ],
-  providers: [UserRepository],
-  exports: [UserRepository],
+  providers: [
+    repositories.UserRepository,
+    repositories.ExpenseRepository,
+    CurrencyMigration,
+    CategoryMigration,
+  ],
+  exports: [
+    MongooseModule,
+    repositories.UserRepository,
+    repositories.ExpenseRepository,
+  ],
 })
 export class DbModule {}
