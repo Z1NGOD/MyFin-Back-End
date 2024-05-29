@@ -1,21 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from '@libs/db/models/user.schema';
+import { User, UserDocument } from '../models/user.schema';
+import { CreateUserDto } from '../../../core/auth/dto';
+import { UpdateUserDto } from '../../../core/user/dto';
 
-interface UserContext {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
 @Injectable()
 export class UserRepository {
   constructor(
     @InjectModel(User.name) private readonly UserModel: Model<User>,
   ) {}
 
-  create(createUserDto: UserContext) {
+  create(createUserDto: CreateUserDto) {
     const createdUser = new this.UserModel(createUserDto);
     return createdUser.save();
   }
@@ -32,7 +28,7 @@ export class UserRepository {
     return this.UserModel.findOne({ email }).exec();
   }
 
-  update(_id: string, updateUserDto: UserContext): Promise<UserDocument> {
+  update(_id: string, updateUserDto: UpdateUserDto): Promise<UserDocument> {
     return this.UserModel.findOneAndUpdate({ _id }, updateUserDto, {
       new: true,
     });

@@ -4,9 +4,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from '@core/user/services';
-import { TokenService } from '@libs/security/services';
-import { RedisService } from '@libs/redis/services/redis.service';
+import { TokenService } from '../../../libs/security/services';
+import { RedisService } from '../../../libs/redis/services/redis.service';
+import { UserService } from '../../user/services';
 import { LoginUserDto, CreateUserDto } from '../dto';
 import { RequestUser } from '../interfaces';
 
