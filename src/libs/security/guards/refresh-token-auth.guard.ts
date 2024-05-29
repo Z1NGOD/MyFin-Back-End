@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { REFRESH_STRATEGY_NAME } from '@common/constants';
+import { REFRESH_STRATEGY_NAME } from '../../../common/constants';
 
 @Injectable()
 export class RefreshTokenAuthGuard extends AuthGuard(REFRESH_STRATEGY_NAME) {

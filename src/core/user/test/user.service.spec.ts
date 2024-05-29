@@ -1,38 +1,170 @@
 import { Test, type TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
+import { UserRepository } from '../../../libs/db/repositories/user.repository';
 import { UserService } from '../services/user.service';
+import { type UpdateUserDto } from '../dto';
+import { type CreateUserDto } from '../../auth/dto';
 
 describe('userService', () => {
   let service: UserService;
-  const _id = '662a8b0dd52cd2e44087a698';
+  let repository: UserRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService],
+      providers: [
+        UserService,
+        {
+          provide: UserRepository,
+          useValue: {
+            create: jest.fn(),
+            findAll: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<UserService>(UserService);
+    repository = module.get<UserRepository>(UserRepository);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return dto', () => {
-    const userMock = {
-      _id: '662a8b0dd52cd2e44087a698',
-      firstName: 'string',
-      lastName: 'string',
-      email: 'string@gmail.com',
-      password: 'Q*123qw231eqw23e132qwe',
-    };
+  describe('create', () => {
+    it('should create a user', async () => {
+      const createUserDto: CreateUserDto = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'password123',
+      };
+      const result = { ...createUserDto, _id: 'user_id' };
 
-    expect(service.update(_id, userMock)).toBe(userMock);
+      jest.spyOn(repository, 'create').mockResolvedValue(result as any);
+
+      expect(await service.create(createUserDto)).toBe(result);
+      expect(repository.create).toHaveBeenCalledWith(createUserDto);
+    });
+
+    it('should throw an error if creation fails', async () => {
+      const createUserDto: CreateUserDto = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'password123',
+      };
+
+      jest
+        .spyOn(repository, 'create')
+        .mockRejectedValue(new Error('Error creating user'));
+
+      await expect(service.create(createUserDto)).rejects.toThrow(
+        'Error creating user',
+      );
+    });
   });
 
-  it('should throw an error', () => {
-    expect(() => service.update(null, null)).toThrow(
-      new BadRequestException('Bad request'),
-    );
+  describe('findAll', () => {
+    it('should find all users', async () => {
+      const result = [
+        {
+          _id: 'user1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+        },
+        {
+          _id: 'user2',
+          firstName: 'Jane',
+          lastName: 'Doe',
+          email: 'jane.doe@example.com',
+        },
+      ];
+      jest.spyOn(repository, 'findAll').mockResolvedValue(result as any);
+
+      expect(await service.findAll()).toBe(result);
+      expect(repository.findAll).toHaveBeenCalled();
+    });
+  });
+
+  describe('findOne', () => {
+    it('should find a user by id', async () => {
+      const result = {
+        _id: 'user_id',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+      };
+
+      jest.spyOn(repository, 'findOne').mockResolvedValue(result as any);
+
+      expect(await service.findOne('user_id')).toBe(result);
+      expect(repository.findOne).toHaveBeenCalledWith('user_id');
+    });
+
+    it('should return null if user not found', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+      expect(await service.findOne('non_existent_id')).toBeNull();
+      expect(repository.findOne).toHaveBeenCalledWith('non_existent_id');
+    });
+  });
+
+  describe('update', () => {
+    it('should update a user', async () => {
+      const updateUserDto: UpdateUserDto = {
+        firstName: 'Johnny',
+        lastName: 'Doe',
+        email: 'johnny.doe@example.com',
+        password: 'newpassword123',
+      };
+      const result = { ...updateUserDto, _id: 'user_id' };
+
+      jest.spyOn(repository, 'update').mockResolvedValue(result as any);
+
+      expect(await service.update('user_id', updateUserDto)).toBe(result);
+      expect(repository.update).toHaveBeenCalledWith('user_id', updateUserDto);
+    });
+
+    it('should throw an error if update fails', async () => {
+      const updateUserDto: UpdateUserDto = {
+        firstName: 'Johnny',
+        lastName: 'Doe',
+        email: 'johnny.doe@example.com',
+        password: 'newpassword123',
+      };
+
+      jest
+        .spyOn(repository, 'update')
+        .mockRejectedValue(new Error('Error updating user'));
+
+      await expect(service.update('user_id', updateUserDto)).rejects.toThrow(
+        'Error updating user',
+      );
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a user', async () => {
+      const result = { acknowledged: true, deletedCount: 1 };
+
+      jest.spyOn(repository, 'remove').mockResolvedValue(result as any);
+
+      expect(await service.remove('user_id')).toBe(result);
+      expect(repository.remove).toHaveBeenCalledWith('user_id');
+    });
+
+    it('should throw an error if removal fails', async () => {
+      jest
+        .spyOn(repository, 'remove')
+        .mockRejectedValue(new Error('Error removing user'));
+
+      await expect(service.remove('user_id')).rejects.toThrow(
+        'Error removing user',
+      );
+    });
   });
 });

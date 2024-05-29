@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as schemas from '@libs/db/models';
-import { AccessTokenAuthGuard } from '@libs/security';
+import { AccessTokenAuthGuard } from '../../../libs/security';
 import { UpdateUserDto, UserResponseDto } from '../dto';
 import { UserService } from '../services/user.service';
 
