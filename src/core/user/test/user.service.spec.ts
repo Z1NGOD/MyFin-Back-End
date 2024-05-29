@@ -1,8 +1,7 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { UserRepository } from '../../../libs/db/repositories/user.repository';
 import { UserService } from '../services/user.service';
-import { type UpdateUserDto } from '../dto';
-import { type CreateUserDto } from '../../auth/dto';
+import { type UpdateUserDto, type CreateUserDto } from '../dto';
 
 describe('userService', () => {
   let service: UserService;
@@ -17,6 +16,7 @@ describe('userService', () => {
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
+            findByEmail: jest.fn(),
             findOne: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
@@ -87,6 +87,34 @@ describe('userService', () => {
 
       expect(await service.findAll()).toBe(result);
       expect(repository.findAll).toHaveBeenCalled();
+    });
+  });
+  describe('findByEmail', () => {
+    it('should find a user by email', async () => {
+      const result = {
+        _id: 'user_id',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+      };
+
+      jest.spyOn(repository, 'findByEmail').mockResolvedValue(result as any);
+
+      expect(await service.findByEmail('john.doe@example.com')).toBe(result);
+      expect(repository.findByEmail).toHaveBeenCalledWith(
+        'john.doe@example.com',
+      );
+    });
+
+    it('should return null if user not found', async () => {
+      jest.spyOn(repository, 'findByEmail').mockResolvedValue(null);
+
+      expect(
+        await service.findByEmail('non_existent_email@example.com'),
+      ).toBeNull();
+      expect(repository.findByEmail).toHaveBeenCalledWith(
+        'non_existent_email@example.com',
+      );
     });
   });
 
