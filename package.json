@@ -35,7 +35,8 @@
       "!**/*.schema.ts",
       "!**/*index.ts",
       "!**/*.repository.ts",
-      "!**/*.interface.ts"
+      "!**/*.interface.ts",
+      "!**/*.guard.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
