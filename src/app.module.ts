@@ -7,6 +7,7 @@ import { AuthModule } from './core/auth/auth.module';
 import { RedisModule } from './libs/redis/redis.module';
 import { CachingModule } from './libs/cache/caching.module';
 import { UserModule } from './core/user/user.module';
+import { BudgetsModule } from './core/budgets/budgets.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './core/user/user.module';
     CachingModule,
     UserModule,
     ExpensesModule,
+    BudgetsModule,
   ],
 })
 export class AppModule {}

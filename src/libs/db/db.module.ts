@@ -31,11 +31,16 @@ import { CategoryMigration, CurrencyMigration } from './migrations';
         name: schemas.Expense.Expense.name,
         schema: schemas.Expense.ExpensesSchema,
       },
+      {
+        name: schemas.Budgets.Budgets.name,
+        schema: schemas.Budgets.BudgetsSchema,
+      },
     ]),
   ],
   providers: [
     repositories.UserRepository,
     repositories.ExpenseRepository,
+    repositories.BudgetsRepository,
     CurrencyMigration,
     CategoryMigration,
   ],
@@ -43,6 +48,7 @@ import { CategoryMigration, CurrencyMigration } from './migrations';
     MongooseModule,
     repositories.UserRepository,
     repositories.ExpenseRepository,
+    repositories.BudgetsRepository,
   ],
 })
 export class DbModule {}
