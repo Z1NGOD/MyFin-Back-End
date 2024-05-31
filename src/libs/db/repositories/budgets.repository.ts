@@ -22,7 +22,10 @@ export class BudgetsRepository {
     return this.BudgetsModel.findById(id);
   }
 
-  update(id: string, updateBudgetDto: UpdateBudgetDto) {
+  update(
+    id: string,
+    updateBudgetDto: UpdateBudgetDto,
+  ): Promise<BudgetsDocument> {
     return this.BudgetsModel.findByIdAndUpdate(id, updateBudgetDto);
   }
 }
