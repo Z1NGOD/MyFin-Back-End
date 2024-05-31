@@ -26,6 +26,8 @@ export class BudgetsRepository {
     id: string,
     updateBudgetDto: UpdateBudgetDto,
   ): Promise<BudgetsDocument> {
-    return this.BudgetsModel.findByIdAndUpdate(id, updateBudgetDto);
+    return this.BudgetsModel.findByIdAndUpdate(id, updateBudgetDto, {
+      new: true,
+    });
   }
 }
