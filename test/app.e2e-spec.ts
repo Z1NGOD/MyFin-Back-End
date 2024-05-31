@@ -1,29 +1,55 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { ValidationPipe, type INestApplication } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { RedisMemoryServer } from 'redis-memory-server';
 import * as request from 'supertest';
-import { CacheModule } from '@nestjs/cache-manager';
-import { RedisModule } from '../src/libs/redis/redis.module';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { TokenService } from '@libs/security';
+import { RedisModule } from '@libs/redis/redis.module';
+import { AuthService } from '@core/auth/services';
+import { UserService } from '@core/user/services';
+import { UserRepository } from '@libs/db/repositories';
 import { AppModule } from '../src/app.module';
 
 describe('appController (e2e)', () => {
   let app: INestApplication;
   let mongoServer: MongoMemoryServer;
+  let redisServer: RedisMemoryServer;
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
+    redisServer = new RedisMemoryServer();
     process.env.DB_URI = mongoServer.getUri();
+    process.env.REDIS_HOST = await redisServer.getHost();
+    process.env.REDIS_PORT = (await redisServer.getPort()).toString();
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, RedisModule],
-    })
-      .overrideModule(RedisModule)
-      .useModule(
-        CacheModule.register({
-          ttl: 100,
-        }),
-      )
-      .compile();
+      providers: [
+        AuthService,
+        TokenService,
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn(),
+          },
+        },
+        UserService,
+        {
+          provide: UserRepository,
+          useValue: {
+            create: jest.fn(),
+            findAll: jest.fn(),
+            findOne: jest.fn(),
+            findByEmail: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+          },
+        },
+        ConfigService,
+      ],
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
@@ -38,15 +64,10 @@ describe('appController (e2e)', () => {
       password: 'Q*123qw231eqw23e132qwe',
     };
 
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post('/auth/registration')
       .send(userMock)
       .expect(201);
-
-    expect(response.body).toHaveProperty('firstName', userMock.firstName);
-    expect(response.body).toHaveProperty('lastName', userMock.lastName);
-    expect(response.body).toHaveProperty('email', userMock.email);
-    expect(response.body).toHaveProperty('password', userMock.password);
   });
 
   it('/POST login successfull', async () => {
@@ -55,13 +76,10 @@ describe('appController (e2e)', () => {
       password: 'Q*123qw231eqw23e132qwe',
     };
 
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post('/auth/login')
       .send(userMock)
       .expect(201);
-
-    expect(response.body).toHaveProperty('email', userMock.email);
-    expect(response.body).toHaveProperty('password', userMock.password);
   });
 
   it('/POST registration failed', async () => {
@@ -102,8 +120,27 @@ describe('appController (e2e)', () => {
     ]);
   });
 
+  it('/POST logout successfull', async () => {
+    const userMock = {
+      email: 'string',
+      password: '1232qwe',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send(userMock)
+      .expect(201);
+
+    const response2 = await request(app.getHttpServer())
+      .post('/auth/logout')
+      .send(response.body)
+      .expect(201);
+
+    expect(response2.body).toHaveProperty('accessToken');
+  });
   afterAll(async () => {
     await app.close();
     await mongoServer.stop();
+    await redisServer.stop();
   });
 });

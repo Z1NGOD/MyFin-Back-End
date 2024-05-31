@@ -1,9 +1,9 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { RedisService } from '@libs/redis/services/redis.service';
 import { AuthService } from '../services';
 import { TokenService } from '../../../libs/security';
-import { RedisService } from '../../../libs/redis/services/redis.service';
 import { UserService } from '../../user/services/user.service';
 import { type LoginUserDto } from '../dto';
 import { type CreateUserDto } from '../../user/dto';

@@ -52,7 +52,12 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "moduleNameMapper": {
+      "@core/(.*)$": "<rootDir>/src/core/$1",
+      "@common/(.*)$": "<rootDir>/src/common/$1",
+      "@libs/(.*)$": "<rootDir>/src/libs/$1"
+    },
+    "rootDir": ".",
     "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -103,6 +108,7 @@
     "jest": "^29.7.0",
     "lint-staged": "^15.2.2",
     "prettier": "^3.0.0",
+    "redis-memory-server": "^0.10.0",
     "redis-mock": "^0.56.3",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
