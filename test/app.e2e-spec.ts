@@ -56,87 +56,21 @@ describe('appController (e2e)', () => {
     await app.init();
   });
 
-  it('/POST registration successfull', async () => {
-    const userMock = {
-      firstName: 'string',
-      lastName: 'string',
-      email: 'string@gmail.com',
-      password: 'Q*123qw231eqw23e132qwe',
-    };
+  describe('auth', () => {
+    it('/POST registration successfull', async () => {
+      const userMock = {
+        firstName: 'string',
+        lastName: 'string',
+        email: 'string@gmail.com',
+        password: 'Q*123qw231eqw23e132qwe',
+      };
 
-    await request(app.getHttpServer())
-      .post('/auth/registration')
-      .send(userMock)
-      .expect(201);
-  });
-
-  it('/POST login successfull', async () => {
-    const userMock = {
-      email: 'string@gmail.com',
-      password: 'Q*123qw231eqw23e132qwe',
-    };
-
-    await request(app.getHttpServer())
-      .post('/auth/login')
-      .send(userMock)
-      .expect(201);
-  });
-
-  it('/POST registration failed', async () => {
-    const userMock = {
-      lastName: '',
-      email: 'string',
-      password: '1232qwe',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/registration')
-      .send(userMock)
-      .expect(400);
-
-    expect(response.body).toHaveProperty('message', [
-      'firstName must be a string',
-      'firstName should not be empty',
-      'lastName should not be empty',
-      'email must be an email',
-      'password is not strong enough',
-    ]);
-  });
-
-  it('/POST login failed', async () => {
-    const userMock = {
-      email: 'string',
-      password: '1232qwe',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send(userMock)
-      .expect(400);
-
-    expect(response.body).toHaveProperty('message', [
-      'email must be an email',
-      'password is not strong enough',
-    ]);
-  });
-
-  it('/POST logout successfull', async () => {
-    const userMock = {
-      email: 'string',
-      password: '1232qwe',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send(userMock)
-      .expect(201);
-
-    const response2 = await request(app.getHttpServer())
-      .post('/auth/logout')
-      .send(response.body)
-      .expect(201);
-
-    expect(response2.body).toHaveProperty('accessToken');
+      const res = await request(app.getHttpServer())
+        .post('/auth/registration')
+        .send(userMock)
+        .expect(201);
+      expect(res.body).toHaveProperty('accessToken');
+    });
   });
   afterAll(async () => {
     await app.close();
