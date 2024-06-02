@@ -8,7 +8,7 @@ import { RedisModule } from './libs/redis/redis.module';
 import { CachingModule } from './libs/cache/caching.module';
 import { UserModule } from './core/user/user.module';
 import { BudgetsModule } from './core/budgets/budgets.module';
-import { validate } from './envValidation/env.vaidation';
+import { validate } from './envValidation/env.validation';
 
 @Module({
   imports: [

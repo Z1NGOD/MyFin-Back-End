@@ -36,7 +36,8 @@
       "!**/*index.ts",
       "!**/*.repository.ts",
       "!**/*.interface.ts",
-      "!**/*.guard.ts"
+      "!**/*.guard.ts",
+      "!**/*.validation.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
@@ -53,11 +54,11 @@
       "ts"
     ],
     "moduleNameMapper": {
-      "@core/(.*)$": "<rootDir>/src/core/$1",
-      "@common/(.*)$": "<rootDir>/src/common/$1",
-      "@libs/(.*)$": "<rootDir>/src/libs/$1"
+      "@core/(.*)$": "<rootDir>/core/$1",
+      "@common/(.*)$": "<rootDir>/common/$1",
+      "@libs/(.*)$": "<rootDir>/libs/$1"
     },
-    "rootDir": ".",
+    "rootDir": "src",
     "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
