@@ -18,7 +18,7 @@ jobs:
       matrix:
         node-version: [18.x, 20.x]
 
-    environment:
+    env:
       DB_URI: value
       PORT: 1
       HOST: value
