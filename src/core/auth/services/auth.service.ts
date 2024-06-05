@@ -62,7 +62,7 @@ export class AuthService {
       this.config.get<number>('REFRESH_EXPIRE_TIME') / 1000,
     );
 
-    return { message: 'Logout successfull' };
+    return true;
   }
 
   async updateAccessToken(refreshToken: string, user: RequestUser) {

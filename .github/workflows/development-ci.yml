@@ -24,8 +24,8 @@ jobs:
       HOST: value
       ACCESS_SECRET: value
       REFRESH_SECRET: value
-      ACCESS_EXPIRE_TIME: 1
-      REFRESH_EXPIRE_TIME: 1
+      ACCESS_EXPIRE_TIME: 1000
+      REFRESH_EXPIRE_TIME: 1000
       REDIS_HOST: value
       REDIS_PORT: 1
 
