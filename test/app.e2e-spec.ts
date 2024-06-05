@@ -171,7 +171,7 @@ describe('appController (e2e)', () => {
             refreshToken: loginResponce.refreshToken,
           })
           .expect(201);
-        expect(res.body).toBeDefined();
+        expect(res.body).toBeTruthy();
       });
 
       it('unsuccessfull', async () => {
