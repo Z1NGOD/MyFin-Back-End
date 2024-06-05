@@ -162,9 +162,8 @@ describe('appController (e2e)', () => {
           .send(userMock)
           .expect(201);
         const loginResponce: Ilogin = login.body as Ilogin;
-        expect(login.body).toHaveProperty('accessToken');
 
-        await request(app.getHttpServer())
+        const res = await request(app.getHttpServer())
           .post('/auth/logout')
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .send({
@@ -172,6 +171,7 @@ describe('appController (e2e)', () => {
             refreshToken: loginResponce.refreshToken,
           })
           .expect(201);
+        expect(res.body).toHaveProperty('message');
       });
 
       it('unsuccessfull', async () => {
