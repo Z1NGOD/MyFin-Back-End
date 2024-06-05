@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
@@ -29,6 +29,9 @@ export class ExpenseRepository {
     id: string,
     updateExpenseDto: UpdateExpenseDto,
   ): Promise<ExpensesDocument> {
+    if (Object.keys(updateExpenseDto).length === 0) {
+      throw new BadRequestException('No update fields provided');
+    }
     const updatedExpense = this.ExpenseModel.findByIdAndUpdate(
       id,
       updateExpenseDto,

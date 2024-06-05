@@ -7,12 +7,10 @@ import {
   Param,
   Delete,
   HttpStatus,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ExpensesService } from '../services/expenses.service';
 import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
-import { AccessTokenAuthGuard } from '../../../libs/security';
 
 @ApiTags('Expenses')
 @Controller('expenses')
@@ -32,7 +30,6 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @UseGuards(AccessTokenAuthGuard)
   @Get()
   findAll() {
     return this.expensesService.findAll();
@@ -51,7 +48,6 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @UseGuards(AccessTokenAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.expensesService.findOne(id);
@@ -70,7 +66,6 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @UseGuards(AccessTokenAuthGuard)
   @Post('create')
   create(@Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.create(createExpenseDto);
@@ -89,7 +84,6 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @UseGuards(AccessTokenAuthGuard)
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
     return this.expensesService.update(id, updateExpenseDto);
@@ -107,7 +101,6 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @UseGuards(AccessTokenAuthGuard)
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.expensesService.remove(id);
