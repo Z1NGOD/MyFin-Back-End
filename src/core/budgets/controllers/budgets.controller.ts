@@ -37,7 +37,7 @@ export class BudgetsController {
     return this.budgetsService.findOne(id);
   }
 
-  @ApiBody({ type: [CreateBudgetDto] })
+  @ApiBody({ type: CreateBudgetDto })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved budget',
