@@ -9,8 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BudgetsService } from '../services/budgets.service';
-import { CreateBudgetDto } from '../dto/create-budget.dto';
-import { UpdateBudgetDto } from '../dto/update-budget.dto';
+import { CreateBudgetDto, UpdateBudgetDto } from '../dto';
 
 @ApiTags('Budgets')
 @Controller('budgets')

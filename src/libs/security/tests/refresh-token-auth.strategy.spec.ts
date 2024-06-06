@@ -1,11 +1,11 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UserRepository } from '@libs/db/repositories';
+import { RedisService } from '@libs/redis/services/redis.service';
+import { REFRESH_STRATEGY_NAME } from '@common/constants';
 import { type JwtPayload } from '../strategies';
-import { UserRepository } from '../../db/repositories/user.repository';
-import { RedisService } from '../../redis/services/redis.service';
 import { RefreshTokenStrategy } from '../strategies/refresh-token.strategy';
-import { REFRESH_STRATEGY_NAME } from '../../../common/constants';
 
 describe('refreshTokenAuthGuard', () => {
   let strategy: RefreshTokenStrategy;

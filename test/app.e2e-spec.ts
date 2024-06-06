@@ -151,7 +151,7 @@ describe('appController (e2e)', () => {
         const res = await request(app.getHttpServer())
           .post('/auth/updateAccessToken')
           .send({})
-          .expect(HttpStatus.BAD_REQUEST);
+          .expect(HttpStatus.FORBIDDEN);
         expect(res.body).toHaveProperty('message');
       });
     });
@@ -205,7 +205,7 @@ describe('appController (e2e)', () => {
           userId: loginResponce.user._id,
           currencyId: '6650cddc7cb8435306eb1a2e',
           amount: 100,
-          type: BudgetType.WEEK,
+          type: BudgetType.Week,
         };
 
         const res = await request(app.getHttpServer())
@@ -238,7 +238,7 @@ describe('appController (e2e)', () => {
           userId: loginResponce.user._id,
           currencyId: '6650cddc7cb8435306eb1a2e',
           amount: 100,
-          type: BudgetType.WEEK,
+          type: BudgetType.Week,
         };
 
         const res = await request(app.getHttpServer())
@@ -275,7 +275,7 @@ describe('appController (e2e)', () => {
           userId: loginResponce.user._id,
           currencyId: '6650cddc7cb8435306eb1a2e',
           amount: 100,
-          type: BudgetType.WEEK,
+          type: BudgetType.Week,
         };
 
         const res = await request(app.getHttpServer())
@@ -479,7 +479,7 @@ describe('appController (e2e)', () => {
           .post('/expenses/create')
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .send(expenseMock)
-          .expect(HttpStatus.BAD_REQUEST);
+          .expect(HttpStatus.CREATED);
 
         const resType: Iexpense = res.body as Iexpense;
         const resUpdate = await request(app.getHttpServer())

@@ -1,9 +1,9 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ACCESS_STRATEGY_NAME } from '../../../common/constants';
-import { UserRepository } from '../../db/repositories/user.repository';
-import { RedisService } from '../../redis/services/redis.service';
+import { ACCESS_STRATEGY_NAME } from '@common/constants';
+import { UserRepository } from '@libs/db/repositories';
+import { RedisService } from '@libs/redis/services/redis.service';
 import { AccessTokenStrategy, type JwtPayload } from '../strategies';
 
 describe('accessTokenAuthGuard', () => {

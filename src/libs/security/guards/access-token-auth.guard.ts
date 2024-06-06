@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ACCESS_STRATEGY_NAME } from '../../../common/constants';
+import { ACCESS_STRATEGY_NAME } from '@common/constants';
 
 @Injectable()
 export class AccessTokenAuthGuard extends AuthGuard(ACCESS_STRATEGY_NAME) {
