@@ -17,7 +17,6 @@ import { UpdateBudgetDto } from '../dto/update-budget.dto';
 export class BudgetsController {
   constructor(private readonly budgetsService: BudgetsService) {}
 
-  @ApiBody({ type: [CreateBudgetDto] })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved budget',

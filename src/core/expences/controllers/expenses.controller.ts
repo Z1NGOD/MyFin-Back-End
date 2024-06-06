@@ -17,7 +17,6 @@ import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
-  @ApiBody({ type: [CreateExpenseDto] })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved all expenses',
@@ -35,7 +34,6 @@ export class ExpensesController {
     return this.expensesService.findAll();
   }
 
-  @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved the expense',
