@@ -7,17 +7,20 @@ import {
   Param,
   Delete,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AccessTokenAuthGuard } from '@libs/security';
 import { ExpensesService } from '../services/expenses.service';
 import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 
 @ApiTags('Expenses')
+@ApiBearerAuth()
+@UseGuards(AccessTokenAuthGuard)
 @Controller('expenses')
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
-  @ApiBody({ type: [CreateExpenseDto] })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved all expenses',
@@ -35,7 +38,6 @@ export class ExpensesController {
     return this.expensesService.findAll();
   }
 
-  @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved the expense',

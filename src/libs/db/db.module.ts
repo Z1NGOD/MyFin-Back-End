@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Category, CategorySchema } from './models/category.schema';
-import { Currency, CurrencySchema } from './models/currency.schema';
-import { ExpensesSchema, Expense } from './models/expenses.schema';
+import * as schemas from './models';
+import * as repositories from './repositories';
 import { CategoryMigration, CurrencyMigration } from './migrations';
 
 @Module({
@@ -14,13 +13,42 @@ import { CategoryMigration, CurrencyMigration } from './migrations';
         retryDelay: 2000,
       }),
     }),
+
     MongooseModule.forFeature([
-      { name: Category.name, schema: CategorySchema },
-      { name: Currency.name, schema: CurrencySchema },
-      { name: Expense.name, schema: ExpensesSchema },
+      {
+        name: schemas.User.User.name,
+        schema: schemas.User.UserSchema,
+      },
+      {
+        name: schemas.Category.Category.name,
+        schema: schemas.Category.CategorySchema,
+      },
+      {
+        name: schemas.Currency.Currency.name,
+        schema: schemas.Currency.CurrencySchema,
+      },
+      {
+        name: schemas.Expense.Expense.name,
+        schema: schemas.Expense.ExpensesSchema,
+      },
+      {
+        name: schemas.Budgets.Budgets.name,
+        schema: schemas.Budgets.BudgetsSchema,
+      },
     ]),
   ],
-  providers: [CurrencyMigration, CategoryMigration],
-  exports: [MongooseModule],
+  providers: [
+    repositories.UserRepository,
+    repositories.ExpenseRepository,
+    repositories.BudgetsRepository,
+    CurrencyMigration,
+    CategoryMigration,
+  ],
+  exports: [
+    MongooseModule,
+    repositories.UserRepository,
+    repositories.ExpenseRepository,
+    repositories.BudgetsRepository,
+  ],
 })
 export class DbModule {}

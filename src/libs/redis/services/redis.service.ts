@@ -1,15 +1,15 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Inject, OnModuleDestroy } from '@nestjs/common';
 import { RedisClient } from '../providers/redis.provider';
 
 @Injectable()
-export class RedisService {
+export class RedisService implements OnModuleDestroy {
   constructor(
-    private readonly cofnigService: ConfigService,
     @Inject('REDIS_CLIENT')
     private readonly redis: RedisClient,
   ) {}
-
+  onModuleDestroy() {
+    this.disconnect();
+  }
   disconnect() {
     this.redis.disconnect();
   }
@@ -22,16 +22,8 @@ export class RedisService {
   async del(key: string) {
     return await this.redis.del(key);
   }
-  async setToken(value: string, exparation: number) {
-    return await this.redis.set('token', value, 'EX', exparation);
-  }
-  async getToken() {
-    return await this.redis.get('token');
-  }
-  async setRefreshToken(value: string, exparation: number) {
-    return await this.redis.set('refreshToken', value, 'EX', exparation);
-  }
-  async getRefreshToken() {
-    return await this.redis.get('refreshToken');
+
+  async setTokenToBlacklist(token: string, expiration: number) {
+    return await this.redis.set(token, 'true', 'EX', expiration);
   }
 }

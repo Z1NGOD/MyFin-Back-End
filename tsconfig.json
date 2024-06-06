@@ -19,12 +19,24 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@core": ["./src/core"],
-      "@core/*": ["./src/core/*"],
-      "@common": ["./src/common"],
-      "@common/*": ["./src/common/*"],
-      "@libs": ["./src/libs"],
-      "@libs/*": ["./src/libs/*"],
+      "@core": [
+        "./src/core"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@common": [
+        "./src/common"
+      ],
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@libs": [
+        "./src/libs"
+      ],
+      "@libs/*": [
+        "./src/libs/*"
+      ],
     }
   }
 }

@@ -69,42 +69,9 @@ describe('redisService', () => {
   });
 
   it('should set a token in Redis', async () => {
-    const value = 'testToken';
+    const token = 'testToken';
     const exparation = 100;
-    await service.setToken(value, exparation);
-    expect(redisMock.set).toHaveBeenCalledWith(
-      'token',
-      value,
-      'EX',
-      exparation,
-    );
-  });
-
-  it('should get a token from Redis', async () => {
-    const value = 'testToken';
-    (redisMock.get as jest.Mock).mockResolvedValue(value);
-    const result = await service.getToken();
-    expect(redisMock.get).toHaveBeenCalled();
-    expect(result).toBe(value);
-  });
-
-  it('should set a refresh token in Redis', async () => {
-    const value = 'testRefreshToken';
-    const exparation = 100;
-    await service.setRefreshToken(value, exparation);
-    expect(redisMock.set).toHaveBeenCalledWith(
-      'refreshToken',
-      value,
-      'EX',
-      exparation,
-    );
-  });
-
-  it('should get a refresh token from Redis', async () => {
-    const value = 'testRefreshToken';
-    (redisMock.get as jest.Mock).mockResolvedValue(value);
-    const result = await service.getRefreshToken();
-    expect(redisMock.get).toHaveBeenCalled();
-    expect(result).toBe(value);
+    await service.setTokenToBlacklist(token, exparation);
+    expect(redisMock.set).toHaveBeenCalledWith(token, 'true', 'EX', exparation);
   });
 });
