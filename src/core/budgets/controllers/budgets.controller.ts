@@ -6,8 +6,10 @@ import {
   Patch,
   Param,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AccessTokenAuthGuard } from '@libs/security';
 import { BudgetsService } from '../services/budgets.service';
 import { CreateBudgetDto, UpdateBudgetDto } from '../dto';
 
@@ -28,6 +30,8 @@ export class BudgetsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.budgetsService.findOne(id);
@@ -46,6 +50,8 @@ export class BudgetsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenAuthGuard)
   @Post('create')
   create(@Body() createBudgetDto: CreateBudgetDto) {
     return this.budgetsService.create(createBudgetDto);
@@ -64,6 +70,8 @@ export class BudgetsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenAuthGuard)
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateBudgetDto: UpdateBudgetDto) {
     return this.budgetsService.update(id, updateBudgetDto);
