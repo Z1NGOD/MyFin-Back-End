@@ -3,12 +3,12 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { BudgetType } from '../enum/budget.enum';
 
 export class CreateBudgetDto {
-  @ApiProperty({ default: 'someString' })
+  @ApiProperty({ default: '663b9dd2606f2f340dcee6d3' })
   @IsNotEmpty()
   @IsString()
   userId: string;
 
-  @ApiProperty({ default: 'someString' })
+  @ApiProperty({ default: '6650cddc7cb8435306eb1a2e' })
   @IsNotEmpty()
   @IsString()
   currencyId: string;
