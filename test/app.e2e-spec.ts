@@ -126,7 +126,6 @@ describe('appController (e2e)', () => {
       });
     });
   });
-
   describe('budgets', () => {
     describe('/POST create', () => {
       it('successfull', async () => {
@@ -158,6 +157,16 @@ describe('appController (e2e)', () => {
         expect(res.body).toHaveProperty('currencyId');
         expect(res.body).toHaveProperty('amount');
         expect(res.body).toHaveProperty('type');
+      });
+      it('unsuccessfull', async () => {
+        const budgetMock = {
+          amount: 100,
+        };
+        const res = await request(app.getHttpServer())
+          .post('/budgets/create')
+          .send(budgetMock)
+          .expect(HttpStatus.UNAUTHORIZED);
+        expect(res.body).toHaveProperty('message');
       });
     });
 
@@ -192,6 +201,16 @@ describe('appController (e2e)', () => {
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res2).toHaveProperty('header');
+      });
+      it('unsuccessfull', async () => {
+        const budgetMock = {
+          amount: 100,
+        };
+        const res = await request(app.getHttpServer())
+          .post('/budgets/create')
+          .send(budgetMock)
+          .expect(HttpStatus.UNAUTHORIZED);
+        expect(res.body).toHaveProperty('message');
       });
     });
 
@@ -232,6 +251,39 @@ describe('appController (e2e)', () => {
         expect(res2).toHaveProperty('header');
       });
     });
+    it('unsuccessfull', async () => {
+      const userMock = {
+        email: 'string@gmail.com',
+        password: 'Q*123qw231eqw23e132qwe',
+      };
+      const login = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(userMock)
+        .expect(HttpStatus.CREATED);
+      const loginResponce: Ilogin = login.body as Ilogin;
+      const updateBudgetMock = {
+        amount: 200,
+      };
+      const budgetMock = {
+        userId: loginResponce.user._id,
+        currencyId: '6650cddc7cb8435306eb1a2e',
+        amount: 100,
+        type: BudgetType.Week,
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/budgets/create')
+        .auth(loginResponce.accessToken, { type: 'bearer' })
+        .send(budgetMock)
+        .expect(HttpStatus.CREATED);
+      const resType: Ibudget = res.body as Ibudget;
+
+      const res2 = await request(app.getHttpServer())
+        .patch(`/budgets/update/${resType._id}`)
+        .send(updateBudgetMock)
+        .expect(HttpStatus.UNAUTHORIZED);
+      expect(res2.body).toHaveProperty('message');
+    });
   });
   describe('expenses', () => {
     describe('/GET findAll', () => {
@@ -265,6 +317,20 @@ describe('appController (e2e)', () => {
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res).toHaveProperty('header');
+      });
+      it('unsuccessfull', async () => {
+        const expenseMock = {
+          userId: '',
+          currencyId: '6650cddc7cb8435306eb1a2f',
+          categoryId: '6650d29a21f0205cce148ab1',
+          amount: 100,
+          details: 'test',
+        };
+        const res = await request(app.getHttpServer())
+          .post('/expenses/create')
+          .send(expenseMock)
+          .expect(HttpStatus.UNAUTHORIZED);
+        expect(res.body).toHaveProperty('message');
       });
     });
 
@@ -301,6 +367,20 @@ describe('appController (e2e)', () => {
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res2).toHaveProperty('header');
+      });
+      it('unsuccessfull', async () => {
+        const expenseMock = {
+          userId: '',
+          currencyId: '6650cddc7cb8435306eb1a2f',
+          categoryId: '6650d29a21f0205cce148ab1',
+          amount: 100,
+          details: 'test',
+        };
+        const res = await request(app.getHttpServer())
+          .post('/expenses/create')
+          .send(expenseMock)
+          .expect(HttpStatus.UNAUTHORIZED);
+        expect(res.body).toHaveProperty('message');
       });
     });
 

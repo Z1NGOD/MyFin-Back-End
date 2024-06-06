@@ -27,7 +27,7 @@ jobs:
       ACCESS_EXPIRE_TIME: 1000
       REFRESH_EXPIRE_TIME: 1000
       REDIS_HOST: value
-      REDIS_PORT: 1
+      REDIS_PORT: 2
 
     steps:
       - uses: actions/checkout@v3
