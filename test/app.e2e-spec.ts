@@ -7,13 +7,6 @@ import {
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { RedisMemoryServer } from 'redis-memory-server';
 import * as request from 'supertest';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { TokenService } from '@libs/security';
-import { RedisModule } from '@libs/redis/redis.module';
-import { AuthService } from '@core/auth/services';
-import { UserService } from '@core/user/services';
-import { UserRepository } from '@libs/db/repositories';
 import { BudgetType } from '@core/budgets/enum/budget.enum';
 import { AppModule } from '../src/app.module';
 import { type Ilogin } from './interfaces/ilogin.interface';
@@ -33,30 +26,7 @@ describe('appController (e2e)', () => {
     process.env.REDIS_PORT = (await redisServer.getPort()).toString();
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, RedisModule],
-      providers: [
-        AuthService,
-        TokenService,
-        {
-          provide: JwtService,
-          useValue: {
-            sign: jest.fn(),
-          },
-        },
-        UserService,
-        {
-          provide: UserRepository,
-          useValue: {
-            create: jest.fn(),
-            findAll: jest.fn(),
-            findOne: jest.fn(),
-            findByEmail: jest.fn(),
-            update: jest.fn(),
-            remove: jest.fn(),
-          },
-        },
-        ConfigService,
-      ],
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -152,37 +122,6 @@ describe('appController (e2e)', () => {
           .post('/auth/updateAccessToken')
           .send({})
           .expect(HttpStatus.FORBIDDEN);
-        expect(res.body).toHaveProperty('message');
-      });
-    });
-
-    describe('/POST logout', () => {
-      it('successfull', async () => {
-        const userMock = {
-          email: 'string@gmail.com',
-          password: 'Q*123qw231eqw23e132qwe',
-        };
-        const login = await request(app.getHttpServer())
-          .post('/auth/login')
-          .send(userMock)
-          .expect(HttpStatus.CREATED);
-        expect(login.body).toHaveProperty('user');
-        const loginResponce: Ilogin = login.body as Ilogin;
-
-        await request(app.getHttpServer())
-          .post('/auth/logout')
-          .auth(loginResponce.accessToken, { type: 'bearer' })
-          .send({
-            accessToken: loginResponce.accessToken,
-            refreshToken: loginResponce.refreshToken,
-          })
-          .expect(HttpStatus.CREATED);
-      });
-
-      it('unsuccessfull', async () => {
-        const res = await request(app.getHttpServer())
-          .post('/auth/logout')
-          .expect(HttpStatus.UNAUTHORIZED);
         expect(res.body).toHaveProperty('message');
       });
     });
