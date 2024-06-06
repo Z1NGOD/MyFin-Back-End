@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { validate } from '@common/envValidation/env.validation';
 import { ExpensesModule } from './core/expences/expenses.module';
 import { redisConfig } from './libs/redis/configs/redis.config';
 import { DbModule } from './libs/db/db.module';
@@ -8,7 +9,6 @@ import { RedisModule } from './libs/redis/redis.module';
 import { CachingModule } from './libs/cache/caching.module';
 import { UserModule } from './core/user/user.module';
 import { BudgetsModule } from './core/budgets/budgets.module';
-import { validate } from './envValidation/env.validation';
 
 @Module({
   imports: [

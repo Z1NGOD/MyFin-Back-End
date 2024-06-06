@@ -37,7 +37,7 @@ describe('budgetsController', () => {
         userId: 'user-id',
         currencyId: 'currency-id',
         amount: 100,
-        type: BudgetType.WEEK,
+        type: BudgetType.Week,
       };
 
       const result = { ...createBudgetDto, _id: 'budget-id' };
@@ -55,7 +55,7 @@ describe('budgetsController', () => {
         userId: 'user-id',
         currencyId: 'currency-id',
         amount: 100,
-        type: BudgetType.WEEK,
+        type: BudgetType.Week,
       };
       jest.spyOn(service, 'findOne').mockResolvedValue(result as any);
 
@@ -70,7 +70,7 @@ describe('budgetsController', () => {
         userId: 'new-user-id',
         currencyId: 'new-currency-id',
         amount: 200,
-        type: BudgetType.MONTH,
+        type: BudgetType.Month,
       };
 
       const result = { ...updateBudgetDto, _id: 'budget-id' };

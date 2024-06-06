@@ -3,9 +3,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { UserRepository } from '../../db/repositories/user.repository';
-import { RedisService } from '../../redis/services/redis.service';
-import { REFRESH_STRATEGY_NAME } from '../../../common/constants';
+import { UserRepository } from '@libs/db/repositories';
+import { RedisService } from '@libs/redis/services/redis.service';
+import { REFRESH_STRATEGY_NAME } from '@common/constants';
 
 export interface JwtPayload {
   sub: string;

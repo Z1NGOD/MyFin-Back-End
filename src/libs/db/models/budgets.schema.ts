@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { BudgetType } from '../../../core/budgets/enum/budget.enum';
+import { BudgetType } from '@core/budgets/enum/budget.enum';
 import { User } from './user.schema';
 import { Currency } from './currency.schema';
 

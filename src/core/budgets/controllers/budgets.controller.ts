@@ -6,18 +6,20 @@ import {
   Patch,
   Param,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AccessTokenAuthGuard } from '@libs/security';
 import { BudgetsService } from '../services/budgets.service';
-import { CreateBudgetDto } from '../dto/create-budget.dto';
-import { UpdateBudgetDto } from '../dto/update-budget.dto';
+import { CreateBudgetDto, UpdateBudgetDto } from '../dto';
 
 @ApiTags('Budgets')
+@ApiBearerAuth()
+@UseGuards(AccessTokenAuthGuard)
 @Controller('budgets')
 export class BudgetsController {
   constructor(private readonly budgetsService: BudgetsService) {}
 
-  @ApiBody({ type: [CreateBudgetDto] })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved budget',
@@ -35,7 +37,7 @@ export class BudgetsController {
     return this.budgetsService.findOne(id);
   }
 
-  @ApiBody({ type: [CreateBudgetDto] })
+  @ApiBody({ type: CreateBudgetDto })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved budget',

@@ -7,12 +7,9 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../../user/dto';
-import {
-  AccessTokenAuthGuard,
-  RefreshTokenAuthGuard,
-} from '../../../libs/security';
-import { AuthService } from '../services/auth.service';
+import { CreateUserDto } from '@core/user/dto';
+import { AccessTokenAuthGuard, RefreshTokenAuthGuard } from '@libs/security';
+import { AuthService } from '../services';
 import { LoginUserDto } from '../dto';
 import { RequestUser } from '../interfaces';
 import { TokensDto } from '../dto/tokens.dto';

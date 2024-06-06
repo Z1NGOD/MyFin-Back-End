@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { RedisModule } from '../redis/redis.module';
+import { RedisModule } from '@libs/redis/redis.module';
 import { DbModule } from '../db/db.module';
 import { TokenService } from './services';
 import { AccessTokenStrategy } from './strategies';
