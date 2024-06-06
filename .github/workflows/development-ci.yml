@@ -9,11 +9,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [18.x, 20.x]
+
+    env:
+      DB_URI: value
+      PORT: 1
+      HOST: value
+      ACCESS_SECRET: value
+      REFRESH_SECRET: value
+      ACCESS_EXPIRE_TIME: 1000
+      REFRESH_EXPIRE_TIME: 1000
+      REDIS_HOST: value
+      REDIS_PORT: 2
 
     steps:
       - uses: actions/checkout@v3
@@ -25,4 +39,5 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run lint
-      - run: npm run test
+      - name: Run integration tests
+        run: npm run test:e2e
