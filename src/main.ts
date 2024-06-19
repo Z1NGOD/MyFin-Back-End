@@ -46,7 +46,13 @@ async function bootstrap() {
   );
 
   app.use(helmet());
-  app.enableCors();
+  const corsOptions = {
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  };
+
+  app.enableCors(corsOptions);
 
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT');
