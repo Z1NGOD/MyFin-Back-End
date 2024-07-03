@@ -28,6 +28,10 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Some property is wrong',
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'User already exists',
+  })
   @Post('registration')
   registration(@Body() createUserDto: CreateUserDto) {
     return this.authService.registration(createUserDto);

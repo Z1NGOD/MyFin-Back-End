@@ -4,6 +4,7 @@ import { CreateUserDto } from '@core/user/dto';
 import { TokenService } from '@libs/security';
 import { RedisService } from '@libs/redis/services/redis.service';
 import { UserService } from '@core/user/services';
+import { CustomBadRequestException } from '@common/exceptions/custom-bad-request-exception';
 import { LoginUserDto } from '../dto';
 import { RequestUser } from '../interfaces';
 
@@ -22,7 +23,7 @@ export class AuthService {
     }
 
     if (await this.userService.findByEmail(userDto.email)) {
-      throw new BadRequestException('User already exists');
+      throw new CustomBadRequestException('User already exists', 'USER_EXISTS');
     }
 
     const user = await this.userService.create(userDto);
