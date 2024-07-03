@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '@core/user/dto';
 import { TokenService } from '@libs/security';
@@ -26,7 +22,7 @@ export class AuthService {
     }
 
     if (await this.userService.findByEmail(userDto.email)) {
-      throw new UnauthorizedException('User already exists');
+      throw new BadRequestException('User already exists');
     }
 
     const user = await this.userService.create(userDto);
@@ -43,7 +39,7 @@ export class AuthService {
 
     const user = await this.userService.findByEmail(userDto.email);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new BadRequestException('User not found');
     }
 
     const payload = { sub: user._id, email: user.email };

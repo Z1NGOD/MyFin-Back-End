@@ -1,5 +1,5 @@
 import { Test, type TestingModule } from '@nestjs/testing';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RedisService } from '@libs/redis/services/redis.service';
 import { AuthService } from '../services';
@@ -70,7 +70,7 @@ describe('authService', () => {
       );
     });
 
-    it('should throw UnauthorizedException if user already exists', async () => {
+    it('should throw BadRequestException if user already exists', async () => {
       jest.spyOn(userService, 'findByEmail').mockResolvedValue({} as any);
 
       const userDto: CreateUserDto = {
@@ -81,7 +81,7 @@ describe('authService', () => {
       };
 
       await expect(authService.registration(userDto)).rejects.toThrow(
-        UnauthorizedException,
+        BadRequestException,
       );
     });
 
@@ -120,7 +120,7 @@ describe('authService', () => {
       );
     });
 
-    it('should throw UnauthorizedException if user not found', async () => {
+    it('should throw BadRequestException if user not found', async () => {
       jest.spyOn(userService, 'findByEmail').mockResolvedValue(null);
 
       const userDto: LoginUserDto = {
@@ -129,7 +129,7 @@ describe('authService', () => {
       };
 
       await expect(authService.login(userDto)).rejects.toThrow(
-        UnauthorizedException,
+        BadRequestException,
       );
     });
 
