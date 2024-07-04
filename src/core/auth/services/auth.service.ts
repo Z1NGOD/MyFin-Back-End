@@ -4,7 +4,7 @@ import { CreateUserDto } from '@core/user/dto';
 import { TokenService } from '@libs/security';
 import { RedisService } from '@libs/redis/services/redis.service';
 import { UserService } from '@core/user/services';
-import { UserAlreadyExistsException } from '@common/exceptions/user-already-exists-exception';
+import { UserAlreadyExistsException } from '@common/exceptions';
 import { LoginUserDto } from '../dto';
 import { RequestUser } from '../interfaces';
 

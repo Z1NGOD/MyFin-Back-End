@@ -2,7 +2,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RedisService } from '@libs/redis/services/redis.service';
-import { UserAlreadyExistsException } from '@common/exceptions/user-already-exists-exception';
+import { UserAlreadyExistsException } from '@common/exceptions';
 import { AuthService } from '../services';
 import { TokenService } from '../../../libs/security';
 import { UserService } from '../../user/services/user.service';
