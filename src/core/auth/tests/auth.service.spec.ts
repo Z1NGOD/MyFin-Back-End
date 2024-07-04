@@ -2,7 +2,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RedisService } from '@libs/redis/services/redis.service';
-import { CustomBadRequestException } from '@common/exceptions/custom-bad-request-exception';
+import { UserAlreadyExistsException } from '@common/exceptions/user-already-exists-exception';
 import { AuthService } from '../services';
 import { TokenService } from '../../../libs/security';
 import { UserService } from '../../user/services/user.service';
@@ -82,7 +82,7 @@ describe('authService', () => {
       };
 
       await expect(authService.registration(userDto)).rejects.toThrow(
-        CustomBadRequestException,
+        UserAlreadyExistsException,
       );
     });
 
