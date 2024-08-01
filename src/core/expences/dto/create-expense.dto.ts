@@ -10,18 +10,18 @@ export class CreateExpenseDto {
   userId: string;
 
   @ApiProperty({
-    default: '6650d29a21f0205cce148ab4',
+    default: 'Food',
   })
   @IsNotEmpty()
   @IsString()
-  categoryId: string;
+  category: string;
 
   @ApiProperty({
-    default: '6650cddc7cb8435306eb1a2e',
+    default: '$',
   })
   @IsNotEmpty()
   @IsString()
-  currencyId: string;
+  currency: string;
 
   @ApiProperty({
     default: 1,

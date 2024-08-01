@@ -5,6 +5,12 @@ import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
 import * as schemas from '../models';
 import { ExpensesDocument } from '../models/expenses.schema';
 
+interface AggregateResult {
+  expenses: ExpensesDocument[];
+  totalAmount: [{ count: number }] | [];
+  sum: [{ total: number }] | [];
+}
+
 @Injectable()
 export class ExpenseRepository {
   constructor(
@@ -17,8 +23,53 @@ export class ExpenseRepository {
     return expense.save();
   }
 
-  async findAll(): Promise<ExpensesDocument[]> {
-    return this.ExpenseModel.find().exec();
+  async findAll(): Promise<{
+    expenses: ExpensesDocument[];
+    totalAmount: number;
+    sum: number;
+  }> {
+    const results = await this.ExpenseModel.aggregate<AggregateResult>([
+      {
+        $facet: {
+          expenses: [{ $match: {} }],
+          totalAmount: [{ $count: 'count' }],
+          sum: [{ $group: { _id: null, total: { $sum: '$amount' } } }],
+        },
+      },
+    ]).exec();
+
+    if (results.length === 0) {
+      return { expenses: [], totalAmount: 0, sum: 0 };
+    }
+
+    const result = results[0];
+
+    return {
+      expenses: result.expenses,
+      totalAmount: result.totalAmount[0]?.count ?? 0,
+      sum: result.sum[0]?.total ?? 0,
+    };
+  }
+
+  async getExpensesByCategory(): Promise<
+    [{ category: string; totalAmount: number }]
+  > {
+    const result = await this.ExpenseModel.aggregate([
+      {
+        $group: {
+          _id: '$category',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          totalAmount: 1,
+        },
+      },
+    ]).exec();
+
+    return result as [{ category: string; totalAmount: number }];
   }
 
   async findById(id: string): Promise<ExpensesDocument> {
