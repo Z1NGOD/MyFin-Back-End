@@ -38,6 +38,11 @@ export class ExpensesController {
     return this.expensesService.findAll();
   }
 
+  @Get('amount')
+  calculateExpensesAmount() {
+    return this.expensesService.calculateExpensesAmount();
+  }
+
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successfully retrieved the expense',

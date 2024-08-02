@@ -18,6 +18,10 @@ export class ExpensesService {
     return this.expenseRepository.findById(id);
   }
 
+  calculateExpensesAmount() {
+    return this.expenseRepository.calculateExpensesAmount();
+  }
+
   update(id: string, updateExpenseDto: UpdateExpenseDto) {
     return this.expenseRepository.update(id, updateExpenseDto);
   }

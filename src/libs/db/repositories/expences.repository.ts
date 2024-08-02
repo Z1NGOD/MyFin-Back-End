@@ -8,7 +8,6 @@ import { ExpensesDocument } from '../models/expenses.schema';
 interface AggregateResult {
   expenses: ExpensesDocument[];
   totalAmount: [{ count: number }] | [];
-  sum: [{ total: number }] | [];
 }
 
 @Injectable()
@@ -23,23 +22,37 @@ export class ExpenseRepository {
     return expense.save();
   }
 
+  async calculateExpensesAmount(): Promise<number> {
+    const result = await this.ExpenseModel.aggregate<{
+      _id: null;
+      total: number;
+    }>([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$amount' },
+        },
+      },
+    ]).exec();
+
+    return result[0]?.total ?? 0;
+  }
+
   async findAll(): Promise<{
     expenses: ExpensesDocument[];
     totalAmount: number;
-    sum: number;
   }> {
     const results = await this.ExpenseModel.aggregate<AggregateResult>([
       {
         $facet: {
           expenses: [{ $match: {} }],
           totalAmount: [{ $count: 'count' }],
-          sum: [{ $group: { _id: null, total: { $sum: '$amount' } } }],
         },
       },
     ]).exec();
 
     if (results.length === 0) {
-      return { expenses: [], totalAmount: 0, sum: 0 };
+      return { expenses: [], totalAmount: 0 };
     }
 
     const result = results[0];
@@ -47,7 +60,6 @@ export class ExpenseRepository {
     return {
       expenses: result.expenses,
       totalAmount: result.totalAmount[0]?.count ?? 0,
-      sum: result.sum[0]?.total ?? 0,
     };
   }
 
