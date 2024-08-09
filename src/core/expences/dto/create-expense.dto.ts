@@ -30,6 +30,12 @@ export class CreateExpenseDto {
   amount: number;
 
   @ApiProperty({
+    default: new Date(),
+  })
+  @IsNotEmpty()
+  date: Date;
+
+  @ApiProperty({
     default: 'some kind of comment',
   })
   @IsString()

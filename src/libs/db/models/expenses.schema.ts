@@ -15,13 +15,15 @@ export class Expense {
   category: string;
 
   @Prop({
-    type: String,
     required: true,
   })
   currency: string;
 
   @Prop({ required: true })
   amount: number;
+
+  @Prop({ required: true })
+  date: Date;
 
   @Prop()
   details: string;
