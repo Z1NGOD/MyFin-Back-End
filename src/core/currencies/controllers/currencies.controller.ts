@@ -5,7 +5,7 @@ import { CurrenciesService } from '../services/currencies.service';
 export class CurrenciesController {
   constructor(private readonly currenciesService: CurrenciesService) {}
 
-  @Get('currencies')
+  @Get()
   findAll() {
     return this.currenciesService.findAll();
   }
