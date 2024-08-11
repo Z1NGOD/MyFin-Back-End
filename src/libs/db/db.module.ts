@@ -13,7 +13,6 @@ import { CategoryMigration, CurrencyMigration } from './migrations';
         retryDelay: 2000,
       }),
     }),
-
     MongooseModule.forFeature([
       {
         name: schemas.User.User.name,
