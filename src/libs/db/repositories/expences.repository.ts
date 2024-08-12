@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
 import * as schemas from '../models';
@@ -7,7 +7,7 @@ import { ExpensesDocument } from '../models/expenses.schema';
 
 interface AggregateResult {
   expenses: ExpensesDocument[];
-  totalAmount: [{ count: number }] | [];
+  totalAmount: number;
 }
 
 @Injectable()
@@ -22,11 +22,16 @@ export class ExpenseRepository {
     return expense.save();
   }
 
-  async calculateExpensesAmount(): Promise<number> {
+  async calculateExpensesAmount(userId: string): Promise<number> {
+    const id = new Types.ObjectId(userId);
+
     const result = await this.ExpenseModel.aggregate<{
       _id: null;
       total: number;
     }>([
+      {
+        $match: { userId: id },
+      },
       {
         $group: {
           _id: null,
@@ -38,48 +43,35 @@ export class ExpenseRepository {
     return result[0]?.total ?? 0;
   }
 
-  async findAll(): Promise<{
+  async findAll(userId: string): Promise<{
     expenses: ExpensesDocument[];
     totalAmount: number;
   }> {
-    const results = await this.ExpenseModel.aggregate<AggregateResult>([
+    const id = new Types.ObjectId(userId);
+    const result = await this.ExpenseModel.aggregate<AggregateResult>([
+      { $match: { userId: id } },
       {
-        $facet: {
-          expenses: [{ $match: {} }],
-          totalAmount: [{ $count: 'count' }],
+        $group: {
+          _id: null,
+          totalAmount: { $sum: 1 },
+          expenses: { $push: '$$ROOT' },
         },
       },
     ]).exec();
 
-    if (results.length === 0) {
-      return { expenses: [], totalAmount: 0 };
-    }
-
-    const result = results[0];
+    const expenses = result[0]?.expenses || [];
+    const totalAmount = result[0]?.totalAmount || 0;
 
     return {
-      expenses: result.expenses,
-      totalAmount: result.totalAmount[0]?.count ?? 0,
+      expenses,
+      totalAmount,
     };
   }
 
   async getExpensesByCategory(): Promise<
     [{ category: string; totalAmount: number }]
   > {
-    const result = await this.ExpenseModel.aggregate([
-      {
-        $group: {
-          _id: '$category',
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          category: '$_id',
-          totalAmount: 1,
-        },
-      },
-    ]).exec();
+    const result = await this.ExpenseModel.aggregate([]).exec();
 
     return result as [{ category: string; totalAmount: number }];
   }
