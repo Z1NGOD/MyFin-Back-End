@@ -68,14 +68,6 @@ export class ExpenseRepository {
     };
   }
 
-  async getExpensesByCategory(): Promise<
-    [{ category: string; totalAmount: number }]
-  > {
-    const result = await this.ExpenseModel.aggregate([]).exec();
-
-    return result as [{ category: string; totalAmount: number }];
-  }
-
   async findById(id: string): Promise<ExpensesDocument> {
     return this.ExpenseModel.findById(id);
   }
