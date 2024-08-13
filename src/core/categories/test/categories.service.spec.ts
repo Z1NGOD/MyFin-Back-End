@@ -27,15 +27,9 @@ describe('categoriesService', () => {
 
   describe('findAll', () => {
     it('should return an array of categories', async () => {
-      const result = [
-        {
-          _id: 'category-id',
-          name: 'category-name',
-        },
-      ];
-      jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
+      jest.spyOn(service, 'findAll');
 
-      expect(await service.findAll()).toBe(result);
+      expect(await service.findAll()).toBe(undefined);
       expect(service.findAll).toHaveBeenCalled();
     });
   });

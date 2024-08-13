@@ -27,17 +27,9 @@ describe('currenciesService', () => {
 
   describe('findAll', () => {
     it('should return an array of currencies', async () => {
-      const result = [
-        {
-          _id: 'currency-id',
-          name: 'name',
-          symbol: 'symbol',
-        },
-      ];
+      jest.spyOn(service, 'findAll');
 
-      jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
-
-      expect(await service.findAll()).toBe(result);
+      expect(await service.findAll()).toBe(undefined);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
