@@ -3,14 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateBudgetDto } from '@core/budgets/dto/create-budget.dto';
 import { UpdateBudgetDto } from '@core/budgets/dto/update-budget.dto';
-import * as schemas from '../models';
-import { BudgetsDocument } from '../models/budgets.schema';
+import { Budgets, BudgetsDocument } from '../models';
 
 @Injectable()
 export class BudgetsRepository {
   constructor(
-    @InjectModel(schemas.Budgets.Budgets.name)
-    private readonly BudgetsModel: Model<schemas.Budgets.Budgets>,
+    @InjectModel(Budgets.name)
+    private readonly BudgetsModel: Model<Budgets>,
   ) {}
 
   create(createBudgetDto: CreateBudgetDto) {

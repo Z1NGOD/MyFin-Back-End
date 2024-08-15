@@ -15,7 +15,7 @@ export const categoryDataJson = [
     name: 'Health',
   },
   {
-    name: 'Entertaiment',
+    name: 'Entertainment',
   },
   {
     name: 'Sport',
@@ -33,7 +33,7 @@ export const categoryDataJson = [
     name: 'House',
   },
   {
-    name: 'Resturants',
+    name: 'Restaurants',
   },
   {
     name: 'Other',

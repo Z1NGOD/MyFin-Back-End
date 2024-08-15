@@ -17,6 +17,7 @@ describe('expensesService', () => {
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
+            calculateExpensesAmount: jest.fn(),
             findById: jest.fn(),
             update: jest.fn(),
             delete: jest.fn(),
@@ -37,9 +38,10 @@ describe('expensesService', () => {
     it('should create an expense', async () => {
       const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        categoryId: 'category-id',
-        currencyId: 'currency-id',
+        category: 'Food',
+        currency: '$',
         amount: 100,
+        date: new Date(),
         details: 'details',
       };
 
@@ -48,6 +50,7 @@ describe('expensesService', () => {
 
       expect(await service.create(createExpenseDto)).toBe(result);
       expect(repository.create).toHaveBeenCalledWith(createExpenseDto);
+      expect(repository.create).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -56,17 +59,19 @@ describe('expensesService', () => {
       const result = [
         {
           userId: 'user-id',
-          categoryId: 'category-id',
-          currencyId: 'currency-id',
+          category: 'Food',
+          currency: '$',
           amount: 100,
           details: 'details',
+          date: new Date(),
           _id: 'expense-id',
         },
       ];
       jest.spyOn(repository, 'findAll').mockResolvedValue(result as any);
 
-      expect(await service.findAll()).toBe(result);
+      expect(await service.findAll('by-users/user-id', '10', '1')).toBe(result);
       expect(repository.findAll).toHaveBeenCalled();
+      expect(repository.findAll).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -82,8 +87,8 @@ describe('expensesService', () => {
       };
       jest.spyOn(repository, 'findById').mockResolvedValue(result as any);
 
-      expect(await service.findOne('expense-id')).toBe(result);
-      expect(repository.findById).toHaveBeenCalledWith('expense-id');
+      expect(await service.findOne('expense/expense-id')).toBe(result);
+      expect(repository.findById).toHaveBeenCalledWith('expense/expense-id');
     });
   });
 

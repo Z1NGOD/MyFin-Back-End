@@ -1,4 +1,3 @@
-import { CreateExpenseDto } from './create-expense.dto';
-import { UpdateExpenseDto } from './update-expense.dto';
-
-export { CreateExpenseDto, UpdateExpenseDto };
+export { CreateExpenseDto } from './create-expense.dto';
+export { UpdateExpenseDto } from './update-expense.dto';
+export { QueryEpxensesDto } from './query-epxenses.dto';

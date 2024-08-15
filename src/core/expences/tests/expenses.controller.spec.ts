@@ -1,7 +1,11 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 import { ExpensesController } from '../controllers/expenses.controller';
 import { ExpensesService } from '../services/expenses.service';
-import { type CreateExpenseDto, type UpdateExpenseDto } from '../dto';
+import {
+  type QueryEpxensesDto,
+  type CreateExpenseDto,
+  type UpdateExpenseDto,
+} from '../dto';
 
 describe('expensesController', () => {
   let controller: ExpensesController;
@@ -33,20 +37,25 @@ describe('expensesController', () => {
   });
 
   describe('findAll', () => {
+    const query: QueryEpxensesDto = {
+      limit: '10',
+      page: '1',
+    };
     it('should return an array of expenses', async () => {
       const result = [
         {
           userId: 'user-id',
-          categoryId: 'category-id',
-          currencyId: 'currency-id',
+          category: 'category-id',
+          currency: 'currency-id',
           amount: 100,
+          date: new Date(),
           details: 'details',
           _id: 'expense-id',
         },
       ];
       jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
 
-      expect(await controller.findAll()).toBe(result);
+      expect(await controller.findAll('by-users/user-id', query)).toBe(result);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
@@ -63,8 +72,8 @@ describe('expensesController', () => {
       };
       jest.spyOn(service, 'findOne').mockResolvedValue(result as any);
 
-      expect(await controller.findOne('expense-id')).toBe(result);
-      expect(service.findOne).toHaveBeenCalledWith('expense-id');
+      expect(await controller.findOne('expense/expense-id')).toBe(result);
+      expect(service.findOne).toHaveBeenCalledWith('expense/expense-id');
     });
   });
 
@@ -72,9 +81,10 @@ describe('expensesController', () => {
     it('should create an expense', async () => {
       const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        categoryId: 'category-id',
-        currencyId: 'currency-id',
+        category: 'category-id',
+        currency: 'currency-id',
         amount: 100,
+        date: new Date(),
         details: 'details',
       };
 
@@ -111,9 +121,10 @@ describe('expensesController', () => {
       const result = {
         _id: 'expense-id',
         userId: 'user-id',
-        categoryId: 'category-id',
-        currencyId: 'currency-id',
+        category: 'category-id',
+        currency: 'currency-id',
         amount: 100,
+        date: new Date(),
         details: 'details',
       };
       jest.spyOn(service, 'remove').mockResolvedValue(result as any);

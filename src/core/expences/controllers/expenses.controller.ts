@@ -8,11 +8,12 @@ import {
   Delete,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenAuthGuard } from '@libs/security';
 import { ExpensesService } from '../services/expenses.service';
-import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
+import { CreateExpenseDto, QueryEpxensesDto, UpdateExpenseDto } from '../dto';
 
 @ApiTags('Expenses')
 @ApiBearerAuth()
@@ -33,9 +34,10 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @Get()
-  findAll() {
-    return this.expensesService.findAll();
+  @Get('/by-users/:userId')
+  findAll(@Param('userId') userId: string, @Query() query: QueryEpxensesDto) {
+    const { limit, page } = query;
+    return this.expensesService.findAll(userId, limit, page);
   }
 
   @ApiResponse({
@@ -50,7 +52,7 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @Get(':id')
+  @Get('findOne/expense/:id')
   findOne(@Param('id') id: string) {
     return this.expensesService.findOne(id);
   }

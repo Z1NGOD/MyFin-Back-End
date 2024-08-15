@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ExpenseRepository } from '@libs/db/repositories';
+import { ExpenseRepository } from '@libs/db';
 import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 
 @Injectable()
@@ -10,8 +10,8 @@ export class ExpensesService {
     return this.expenseRepository.create(createExpenseDto);
   }
 
-  findAll() {
-    return this.expenseRepository.findAll();
+  findAll(userId: string, limit: string, page: string) {
+    return this.expenseRepository.findAll(userId, limit, page);
   }
 
   findOne(id: string) {

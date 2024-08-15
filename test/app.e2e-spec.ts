@@ -300,9 +300,10 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          category: 'Food',
+          currency: '$',
           amount: 100,
+          date: new Date(),
           details: 'test',
         };
 
@@ -313,7 +314,7 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.CREATED);
 
         const res = await request(app.getHttpServer())
-          .get(`/expenses`)
+          .get(`/expenses/by-users/${loginResponce.user._id}?limit=10&page=1`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res).toHaveProperty('header');
@@ -334,7 +335,7 @@ describe('appController (e2e)', () => {
       });
     });
 
-    describe('/GET find', () => {
+    describe('/GET findOne', () => {
       it('successfull', async () => {
         const userMock = {
           email: 'string@gmail.com',
@@ -348,9 +349,10 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          category: 'Food',
+          currency: '$',
           amount: 100,
+          date: new Date(),
           details: 'test',
         };
 
@@ -363,7 +365,7 @@ describe('appController (e2e)', () => {
         const resType: Iexpense = res.body as Iexpense;
 
         const res2 = await request(app.getHttpServer())
-          .get(`/expenses/${resType._id}`)
+          .get(`/expenses/findOne/expense/${resType._id}`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res2).toHaveProperty('header');
@@ -397,9 +399,10 @@ describe('appController (e2e)', () => {
         const loginResponce: Ilogin = login.body as Ilogin;
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: '6650d29a21f0205cce148ab0',
+          category: 'Food',
+          currency: '$',
           amount: 100,
-          currencyId: '6650cddc7cb8435306eb1a2e',
+          date: new Date(),
           details: 'test',
         };
         const res = await request(app.getHttpServer())
@@ -409,9 +412,10 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.CREATED);
         expect(res.body).toHaveProperty('_id');
         expect(res.body).toHaveProperty('userId');
-        expect(res.body).toHaveProperty('currencyId');
-        expect(res.body).toHaveProperty('categoryId');
+        expect(res.body).toHaveProperty('category');
+        expect(res.body).toHaveProperty('currency');
         expect(res.body).toHaveProperty('amount');
+        expect(res.body).toHaveProperty('date');
         expect(res.body).toHaveProperty('details');
       });
       it('unsuccessfull', async () => {
@@ -449,9 +453,10 @@ describe('appController (e2e)', () => {
         const loginResponce: Ilogin = login.body as Ilogin;
         const expenseMock = {
           userId: loginResponce.user._id,
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          category: 'Food',
+          currency: '$',
           amount: 100,
+          date: new Date(),
           details: 'test',
         };
         const res = await request(app.getHttpServer())
@@ -471,9 +476,10 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.OK);
         expect(resUpdate.body).toHaveProperty('_id');
         expect(resUpdate.body).toHaveProperty('userId');
-        expect(resUpdate.body).toHaveProperty('currencyId');
-        expect(resUpdate.body).toHaveProperty('categoryId');
+        expect(resUpdate.body).toHaveProperty('category');
+        expect(resUpdate.body).toHaveProperty('currency');
         expect(resUpdate.body).toHaveProperty('amount');
+        expect(resUpdate.body).toHaveProperty('date');
         expect(resUpdate.body).toHaveProperty('details');
       });
 
@@ -489,9 +495,10 @@ describe('appController (e2e)', () => {
         const loginResponce: Ilogin = login.body as Ilogin;
         const expenseMock = {
           userId: loginResponce.user._id,
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          category: 'Food',
+          currency: '$',
           amount: 100,
+          date: new Date(),
           details: 'test',
         };
         const res = await request(app.getHttpServer())
@@ -523,9 +530,10 @@ describe('appController (e2e)', () => {
         const loginResponce: Ilogin = login.body as Ilogin;
         const expenseMock = {
           userId: loginResponce.user._id,
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          category: 'Food',
+          currency: '$',
           amount: 100,
+          date: new Date(),
           details: 'test',
         };
         const res = await request(app.getHttpServer())
@@ -554,9 +562,10 @@ describe('appController (e2e)', () => {
         const loginResponce: Ilogin = login.body as Ilogin;
         const expenseMock = {
           userId: loginResponce.user._id,
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          category: 'Food',
+          currency: '$',
           amount: 100,
+          date: new Date(),
           details: 'test',
         };
         await request(app.getHttpServer())
