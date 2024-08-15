@@ -314,7 +314,7 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.CREATED);
 
         const res = await request(app.getHttpServer())
-          .get(`/expenses/${loginResponce.user._id}?limit=10&page=1`)
+          .get(`/expenses/by-users/${loginResponce.user._id}?limit=10&page=1`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res).toHaveProperty('header');
@@ -365,7 +365,7 @@ describe('appController (e2e)', () => {
         const resType: Iexpense = res.body as Iexpense;
 
         const res2 = await request(app.getHttpServer())
-          .get(`/expenses/findOne/${resType._id}`)
+          .get(`/expenses/findOne/expense/${resType._id}`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .expect(HttpStatus.OK);
         expect(res2).toHaveProperty('header');
