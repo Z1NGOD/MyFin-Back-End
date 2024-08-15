@@ -7,11 +7,7 @@ import { Expense, ExpensesDocument } from '../models';
 interface EpxnesesAndTotalCount {
   expenses: ExpensesDocument[];
   totalCount: number;
-}
-
-interface ExpensesAmount {
-  _id: null;
-  total: number;
+  amount: number;
 }
 
 @Injectable()
@@ -26,46 +22,42 @@ export class ExpenseRepository {
     return expense.save();
   }
 
-  async calculateExpensesAmount(userId: string): Promise<number> {
-    const id = new Types.ObjectId(userId);
-
-    const result = await this.ExpenseModel.aggregate<ExpensesAmount>([
-      {
-        $match: { userId: id },
-      },
-      {
-        $group: {
-          _id: null,
-          total: { $sum: '$amount' },
-        },
-      },
-    ]).exec();
-
-    return result[0]?.total ?? 0;
-  }
-
-  async findAll(userId: string): Promise<{
+  async findAll(
+    userId: string,
+    limit: string,
+    page: string,
+  ): Promise<{
     expenses: ExpensesDocument[];
     totalCount: number;
+    amount: number;
   }> {
     const id = new Types.ObjectId(userId);
+    const limitInt = Number(limit);
+    const pageInt = Number(page);
+    const skip = limitInt * (pageInt - 1);
+
     const result = await this.ExpenseModel.aggregate<EpxnesesAndTotalCount>([
       { $match: { userId: id } },
+      { $limit: limitInt },
+      { $skip: skip },
       {
         $group: {
           _id: null,
           totalCount: { $sum: 1 },
           expenses: { $push: '$$ROOT' },
+          amount: { $sum: '$amount' },
         },
       },
     ]).exec();
 
     const expenses = result[0]?.expenses || [];
     const totalCount = result[0]?.totalCount || 0;
+    const amount = result[0]?.amount || 0;
 
     return {
       expenses,
       totalCount,
+      amount,
     };
   }
 

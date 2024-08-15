@@ -10,16 +10,12 @@ export class ExpensesService {
     return this.expenseRepository.create(createExpenseDto);
   }
 
-  findAll(userId: string) {
-    return this.expenseRepository.findAll(userId);
+  findAll(userId: string, limit: string, page: string) {
+    return this.expenseRepository.findAll(userId, limit, page);
   }
 
   findOne(id: string) {
     return this.expenseRepository.findById(id);
-  }
-
-  calculateExpensesAmount(userId: string) {
-    return this.expenseRepository.calculateExpensesAmount(userId);
   }
 
   update(id: string, updateExpenseDto: UpdateExpenseDto) {

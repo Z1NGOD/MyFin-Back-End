@@ -69,25 +69,9 @@ describe('expensesService', () => {
       ];
       jest.spyOn(repository, 'findAll').mockResolvedValue(result as any);
 
-      expect(await service.findAll('user-id')).toBe(result);
+      expect(await service.findAll('user-id', '10', '1')).toBe(result);
       expect(repository.findAll).toHaveBeenCalled();
       expect(repository.findAll).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('calculateExpensesAmount', () => {
-    it('should return the total sum of expenses amount value', async () => {
-      const result = 100;
-
-      jest
-        .spyOn(repository, 'calculateExpensesAmount')
-        .mockResolvedValue(result as any);
-
-      expect(await service.calculateExpensesAmount('user-id')).toBe(result);
-      expect(repository.calculateExpensesAmount).toHaveBeenCalledWith(
-        'user-id',
-      );
-      expect(repository.calculateExpensesAmount).toHaveBeenCalledTimes(1);
     });
   });
 

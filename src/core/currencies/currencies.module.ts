@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DbModule } from '@libs/db/db.module';
+import { DbModule } from '@libs/db';
 import { CurrenciesRepository } from '@libs/db/repositories/currencies.repository';
 import { CurrenciesService } from './services/currencies.service';
 import { CurrenciesController } from './controllers/currencies.controller';
