@@ -8,7 +8,6 @@ import {
   Delete,
   HttpStatus,
   UseGuards,
-  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenAuthGuard } from '@libs/security';
@@ -34,13 +33,25 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @Get()
-  findAll(@Query('userId') userId: string) {
+  @Get(':userId')
+  findAll(@Param('userId') userId: string) {
     return this.expensesService.findAll(userId);
   }
 
-  @Get('amount')
-  calculateExpensesAmount(@Query('userId') userId: string) {
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully got expenses amount',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'No expenses found',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+  })
+  @Get('amount/:userId')
+  calculateExpensesAmount(@Param('userId') userId: string) {
     return this.expensesService.calculateExpensesAmount(userId);
   }
 

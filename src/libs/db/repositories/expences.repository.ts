@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
 import { Expense, ExpensesDocument } from '../models';
 
-interface EpxneseAndTotalCount {
+interface EpxnesesAndTotalCount {
   expenses: ExpensesDocument[];
   totalCount: number;
 }
@@ -49,7 +49,7 @@ export class ExpenseRepository {
     totalCount: number;
   }> {
     const id = new Types.ObjectId(userId);
-    const result = await this.ExpenseModel.aggregate<EpxneseAndTotalCount>([
+    const result = await this.ExpenseModel.aggregate<EpxnesesAndTotalCount>([
       { $match: { userId: id } },
       {
         $group: {
