@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CategoriesRepository } from '@libs/db/repositories/categories.repository';
+import { CategoriesRepository } from '@libs/db';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly categoriesrepository: CategoriesRepository) {}
+  constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
   findAll() {
-    return this.categoriesrepository.findAll();
+    return this.categoriesRepository.findAll();
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CurrenciesRepository } from '@libs/db/repositories/currencies.repository';
+import { CurrenciesRepository } from '@libs/db';
 
 @Injectable()
 export class CurrenciesService {
