@@ -1,5 +1,3 @@
-import { ExpenseRepository } from './expences.repository';
-import { UserRepository } from './user.repository';
-import { BudgetsRepository } from './budgets.repository';
-
-export { ExpenseRepository, UserRepository, BudgetsRepository };
+export { ExpenseRepository } from './expences.repository';
+export { UserRepository } from './user.repository';
+export { BudgetsRepository } from './budgets.repository';

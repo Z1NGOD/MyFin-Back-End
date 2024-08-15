@@ -1,8 +1,23 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import * as schemas from './models';
-import * as repositories from './repositories';
+import {
+  UserRepository,
+  ExpenseRepository,
+  BudgetsRepository,
+} from './repositories';
 import { CategoryMigration, CurrencyMigration } from './migrations';
+import {
+  User,
+  UserSchema,
+  Category,
+  CategorySchema,
+  Currency,
+  CurrencySchema,
+  Expense,
+  ExpensesSchema,
+  Budgets,
+  BudgetsSchema,
+} from './models';
 
 @Module({
   imports: [
@@ -15,39 +30,39 @@ import { CategoryMigration, CurrencyMigration } from './migrations';
     }),
     MongooseModule.forFeature([
       {
-        name: schemas.User.User.name,
-        schema: schemas.User.UserSchema,
+        name: User.name,
+        schema: UserSchema,
       },
       {
-        name: schemas.Category.Category.name,
-        schema: schemas.Category.CategorySchema,
+        name: Category.name,
+        schema: CategorySchema,
       },
       {
-        name: schemas.Currency.Currency.name,
-        schema: schemas.Currency.CurrencySchema,
+        name: Currency.name,
+        schema: CurrencySchema,
       },
       {
-        name: schemas.Expense.Expense.name,
-        schema: schemas.Expense.ExpensesSchema,
+        name: Expense.name,
+        schema: ExpensesSchema,
       },
       {
-        name: schemas.Budgets.Budgets.name,
-        schema: schemas.Budgets.BudgetsSchema,
+        name: Budgets.name,
+        schema: BudgetsSchema,
       },
     ]),
   ],
   providers: [
-    repositories.UserRepository,
-    repositories.ExpenseRepository,
-    repositories.BudgetsRepository,
+    UserRepository,
+    ExpenseRepository,
+    BudgetsRepository,
     CurrencyMigration,
     CategoryMigration,
   ],
   exports: [
     MongooseModule,
-    repositories.UserRepository,
-    repositories.ExpenseRepository,
-    repositories.BudgetsRepository,
+    UserRepository,
+    ExpenseRepository,
+    BudgetsRepository,
   ],
 })
 export class DbModule {}

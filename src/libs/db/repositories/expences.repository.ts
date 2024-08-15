@@ -2,19 +2,23 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
-import * as schemas from '../models';
-import { ExpensesDocument } from '../models/expenses.schema';
+import { Expense, ExpensesDocument } from '../models';
 
-interface AggregateResult {
+interface EpxneseAndTotalCount {
   expenses: ExpensesDocument[];
-  totalAmount: number;
+  totalCount: number;
+}
+
+interface ExpensesAmount {
+  _id: null;
+  total: number;
 }
 
 @Injectable()
 export class ExpenseRepository {
   constructor(
-    @InjectModel(schemas.Expense.Expense.name)
-    private readonly ExpenseModel: Model<schemas.Expense.Expense>,
+    @InjectModel(Expense.name)
+    private readonly ExpenseModel: Model<Expense>,
   ) {}
 
   async create(createExpenseDto: CreateExpenseDto) {
@@ -25,10 +29,7 @@ export class ExpenseRepository {
   async calculateExpensesAmount(userId: string): Promise<number> {
     const id = new Types.ObjectId(userId);
 
-    const result = await this.ExpenseModel.aggregate<{
-      _id: null;
-      total: number;
-    }>([
+    const result = await this.ExpenseModel.aggregate<ExpensesAmount>([
       {
         $match: { userId: id },
       },
@@ -45,26 +46,26 @@ export class ExpenseRepository {
 
   async findAll(userId: string): Promise<{
     expenses: ExpensesDocument[];
-    totalAmount: number;
+    totalCount: number;
   }> {
     const id = new Types.ObjectId(userId);
-    const result = await this.ExpenseModel.aggregate<AggregateResult>([
+    const result = await this.ExpenseModel.aggregate<EpxneseAndTotalCount>([
       { $match: { userId: id } },
       {
         $group: {
           _id: null,
-          totalAmount: { $sum: 1 },
+          totalCount: { $sum: 1 },
           expenses: { $push: '$$ROOT' },
         },
       },
     ]).exec();
 
     const expenses = result[0]?.expenses || [];
-    const totalAmount = result[0]?.totalAmount || 0;
+    const totalCount = result[0]?.totalCount || 0;
 
     return {
       expenses,
-      totalAmount,
+      totalCount,
     };
   }
 

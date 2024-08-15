@@ -1,7 +1,5 @@
-import * as User from './user.schema';
-import * as Category from './category.schema';
-import * as Currency from './currency.schema';
-import * as Expense from './expenses.schema';
-import * as Budgets from './budgets.schema';
-
-export { User, Category, Currency, Expense, Budgets };
+export * from './user.schema';
+export * from './category.schema';
+export * from './currency.schema';
+export * from './expenses.schema';
+export * from './budgets.schema';
