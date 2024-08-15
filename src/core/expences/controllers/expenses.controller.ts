@@ -34,7 +34,7 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @Get(':userId')
+  @Get('/by-users/:userId')
   findAll(@Param('userId') userId: string, @Query() query: QueryEpxensesDto) {
     const { limit, page } = query;
     return this.expensesService.findAll(userId, limit, page);
@@ -52,7 +52,7 @@ export class ExpensesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Internal server error',
   })
-  @Get('findOne/:id')
+  @Get('findOne/expense/:id')
   findOne(@Param('id') id: string) {
     return this.expensesService.findOne(id);
   }

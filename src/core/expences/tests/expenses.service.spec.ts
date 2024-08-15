@@ -69,7 +69,7 @@ describe('expensesService', () => {
       ];
       jest.spyOn(repository, 'findAll').mockResolvedValue(result as any);
 
-      expect(await service.findAll('user-id', '10', '1')).toBe(result);
+      expect(await service.findAll('by-users/user-id', '10', '1')).toBe(result);
       expect(repository.findAll).toHaveBeenCalled();
       expect(repository.findAll).toHaveBeenCalledTimes(1);
     });
@@ -87,8 +87,8 @@ describe('expensesService', () => {
       };
       jest.spyOn(repository, 'findById').mockResolvedValue(result as any);
 
-      expect(await service.findOne('expense-id')).toBe(result);
-      expect(repository.findById).toHaveBeenCalledWith('expense-id');
+      expect(await service.findOne('expense/expense-id')).toBe(result);
+      expect(repository.findById).toHaveBeenCalledWith('expense/expense-id');
     });
   });
 

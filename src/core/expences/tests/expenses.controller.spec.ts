@@ -55,7 +55,7 @@ describe('expensesController', () => {
       ];
       jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
 
-      expect(await controller.findAll('user-id', query)).toBe(result);
+      expect(await controller.findAll('by-users/user-id', query)).toBe(result);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
@@ -72,8 +72,8 @@ describe('expensesController', () => {
       };
       jest.spyOn(service, 'findOne').mockResolvedValue(result as any);
 
-      expect(await controller.findOne('expense-id')).toBe(result);
-      expect(service.findOne).toHaveBeenCalledWith('expense-id');
+      expect(await controller.findOne('expense/expense-id')).toBe(result);
+      expect(service.findOne).toHaveBeenCalledWith('expense/expense-id');
     });
   });
 
