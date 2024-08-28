@@ -20,7 +20,7 @@ export class ExpensesService {
       draftExepnseDto.categoryId,
     );
     if (!category) {
-      throw new BadRequestException('No such category');
+      throw new BadRequestException(draftExepnseDto.categoryId);
     }
 
     const currency = await this.currencyRepository.findById(

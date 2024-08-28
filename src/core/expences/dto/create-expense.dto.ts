@@ -36,7 +36,7 @@ export class CreateExpenseDto {
   date: Date;
 
   @ApiProperty({
-    default: 'some kind of comment',
+    default: 'ATB',
   })
   @IsString()
   @MaxLength(15)
