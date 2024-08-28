@@ -13,4 +13,8 @@ export class CurrenciesRepository {
   async findAll(): Promise<CurrenciesDocument[]> {
     return await this.CurrenciesModel.find();
   }
+
+  async findById(id: string): Promise<CurrenciesDocument> {
+    return await this.CurrenciesModel.findById(id);
+  }
 }

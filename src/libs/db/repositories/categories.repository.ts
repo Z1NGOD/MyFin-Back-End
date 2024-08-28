@@ -13,4 +13,8 @@ export class CategoriesRepository {
   async findAll(): Promise<CategoriesDocument[]> {
     return await this.CategoryModel.find();
   }
+
+  async findById(id: string): Promise<CategoriesDocument> {
+    return await this.CategoryModel.findById(id);
+  }
 }

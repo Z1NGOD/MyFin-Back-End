@@ -1,13 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { ExpenseRepository } from '@libs/db';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  CategoriesRepository,
+  CurrenciesRepository,
+  ExpenseRepository,
+} from '@libs/db';
 import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
+import { DraftExpenseDto } from '../dto/draft-expense.dto';
 
 @Injectable()
 export class ExpensesService {
-  constructor(private readonly expenseRepository: ExpenseRepository) {}
+  constructor(
+    private readonly expenseRepository: ExpenseRepository,
+    private readonly categoryRepository: CategoriesRepository,
+    private readonly currencyRepository: CurrenciesRepository,
+  ) {}
 
-  create(createExpenseDto: CreateExpenseDto) {
+  async create(draftExepnseDto: DraftExpenseDto) {
+    const category = await this.categoryRepository.findById(
+      draftExepnseDto.categoryId,
+    );
+    if (!category) {
+      throw new BadRequestException('No such category');
+    }
+
+    const currency = await this.currencyRepository.findById(
+      draftExepnseDto.currencyId,
+    );
+    if (!currency) {
+      throw new BadRequestException('No such currency');
+    }
+
+    const createExpenseDto: CreateExpenseDto = {
+      userId: draftExepnseDto.userId,
+      category: category.name,
+      currency: currency.symbol,
+      amount: draftExepnseDto.amount,
+      date: draftExepnseDto.date,
+      details: draftExepnseDto.details,
+    };
+
     return this.expenseRepository.create(createExpenseDto);
+  }
+
+  calculateAmount(userId: string) {
+    return this.expenseRepository.calculateAmount(userId);
   }
 
   findAll(userId: string, limit: string, page: string) {

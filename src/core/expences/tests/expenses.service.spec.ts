@@ -1,12 +1,16 @@
 import { Test, type TestingModule } from '@nestjs/testing';
+import { CategoriesRepository, CurrenciesRepository } from '@libs/db';
 import { ExpenseRepository } from '../../../libs/db/repositories/expences.repository';
 import { ExpensesService } from '../services/expenses.service';
 import { type CreateExpenseDto } from '../dto/create-expense.dto';
 import { type UpdateExpenseDto } from '../dto/update-expense.dto';
+import { type DraftExpenseDto } from '../dto/draft-expense.dto';
 
 describe('expensesService', () => {
   let service: ExpensesService;
   let repository: ExpenseRepository;
+  let categoriesRepository: CategoriesRepository;
+  let currenciesRepository: CurrenciesRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,10 +21,22 @@ describe('expensesService', () => {
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
-            calculateExpensesAmount: jest.fn(),
+            calculateAmount: jest.fn(),
             findById: jest.fn(),
             update: jest.fn(),
             delete: jest.fn(),
+          },
+        },
+        {
+          provide: CategoriesRepository,
+          useValue: {
+            findById: jest.fn(),
+          },
+        },
+        {
+          provide: CurrenciesRepository,
+          useValue: {
+            findById: jest.fn(),
           },
         },
       ],
@@ -28,6 +44,10 @@ describe('expensesService', () => {
 
     service = module.get<ExpensesService>(ExpensesService);
     repository = module.get<ExpenseRepository>(ExpenseRepository);
+    categoriesRepository =
+      module.get<CategoriesRepository>(CategoriesRepository);
+    currenciesRepository =
+      module.get<CurrenciesRepository>(CurrenciesRepository);
   });
 
   it('should be defined', () => {
@@ -36,19 +56,51 @@ describe('expensesService', () => {
 
   describe('create', () => {
     it('should create an expense', async () => {
+      const fixedDate = new Date('2023-01-01T00:00:00Z');
+      jest.spyOn(global, 'Date').mockImplementation(() => fixedDate);
+
+      const draftExpenseDto: DraftExpenseDto = {
+        userId: 'user-id',
+        categoryId: '66cca6e1bcca345eb76427fa',
+        currencyId: '66b8c50a36f209530248369d',
+        amount: 100,
+        date: fixedDate,
+        details: 'details',
+      };
+
+      jest.spyOn(categoriesRepository, 'findById').mockResolvedValue({
+        _id: '66cca6e1bcca345eb76427fa',
+        name: 'Food',
+      });
+
+      jest.spyOn(currenciesRepository, 'findById').mockResolvedValue({
+        _id: '66b8c50a36f209530248369d',
+        name: 'USD',
+        symbol: '$',
+        exchangeRate: 1,
+      });
+
+      const category = await categoriesRepository.findById(
+        draftExpenseDto.categoryId,
+      );
+
+      const currency = await currenciesRepository.findById(
+        draftExpenseDto.currencyId,
+      );
+
       const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        category: 'Food',
-        currency: '$',
+        category: category.name,
+        currency: currency.symbol,
         amount: 100,
-        date: new Date(),
         details: 'details',
+        date: fixedDate,
       };
 
       const result = { ...createExpenseDto, _id: 'expense-id' };
       jest.spyOn(repository, 'create').mockResolvedValue(result as any);
 
-      expect(await service.create(createExpenseDto)).toBe(result);
+      expect(await service.create(draftExpenseDto)).toBe(result);
       expect(repository.create).toHaveBeenCalledWith(createExpenseDto);
       expect(repository.create).toHaveBeenCalledTimes(1);
     });
@@ -124,6 +176,24 @@ describe('expensesService', () => {
 
       expect(await service.remove('expense-id')).toBe(result);
       expect(repository.delete).toHaveBeenCalledWith('expense-id');
+    });
+  });
+  describe('calculateExpensesAmount', () => {
+    it('should calculate expenses amount', async () => {
+      const result = {
+        _id: 'expense-id',
+        userId: 'user-id',
+        categoryId: 'category-id',
+        currencyId: 'currency-id',
+        amount: 100,
+        details: 'details',
+      };
+      jest
+        .spyOn(repository, 'calculateAmount')
+        .mockResolvedValue(result as any);
+
+      expect(await service.calculateAmount('expense-id')).toBe(result);
+      expect(repository.calculateAmount).toHaveBeenCalledWith('expense-id');
     });
   });
 });

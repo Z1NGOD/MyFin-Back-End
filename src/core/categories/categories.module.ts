@@ -7,5 +7,6 @@ import { CategoriesController } from './controllers/categories.controller';
   imports: [DbModule],
   controllers: [CategoriesController],
   providers: [CategoriesService, CategoriesRepository],
+  exports: [CategoriesRepository],
 })
 export class CategoriesModule {}

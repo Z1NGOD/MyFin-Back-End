@@ -13,7 +13,8 @@ import {
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenAuthGuard } from '@libs/security';
 import { ExpensesService } from '../services/expenses.service';
-import { CreateExpenseDto, QueryEpxensesDto, UpdateExpenseDto } from '../dto';
+import { QueryEpxensesDto, UpdateExpenseDto } from '../dto';
+import { DraftExpenseDto } from '../dto/draft-expense.dto';
 
 @ApiTags('Expenses')
 @ApiBearerAuth()
@@ -42,6 +43,23 @@ export class ExpensesController {
 
   @ApiResponse({
     status: HttpStatus.OK,
+    description: 'Successfully retrieved expenses money amount',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'No expenses found',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+  })
+  @Get('/amount/by-users/:userId')
+  calculateAmount(@Param('userId') userId: string) {
+    return this.expensesService.calculateAmount(userId);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
     description: 'Successfully retrieved the expense',
   })
   @ApiResponse({
@@ -57,7 +75,7 @@ export class ExpensesController {
     return this.expensesService.findOne(id);
   }
 
-  @ApiBody({ type: CreateExpenseDto })
+  @ApiBody({ type: DraftExpenseDto })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Expense created successfully',
@@ -71,8 +89,8 @@ export class ExpensesController {
     description: 'Internal server error',
   })
   @Post('create')
-  create(@Body() createExpenseDto: CreateExpenseDto) {
-    return this.expensesService.create(createExpenseDto);
+  create(@Body() draftExepnseDto: DraftExpenseDto) {
+    return this.expensesService.create(draftExepnseDto);
   }
 
   @ApiBody({ type: UpdateExpenseDto })
