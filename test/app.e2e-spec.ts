@@ -330,8 +330,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -352,8 +352,8 @@ describe('appController (e2e)', () => {
       it('unsuccessfull', async () => {
         const expenseMock = {
           userId: '',
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          currency: '6650cddc7cb8435306eb1a2f',
+          category: '6650d29a21f0205cce148ab1',
           amount: 100,
           details: 'test',
         };
@@ -405,8 +405,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -429,8 +429,8 @@ describe('appController (e2e)', () => {
       it('unsuccessfull', async () => {
         const expenseMock = {
           userId: '',
-          currencyId: '6650cddc7cb8435306eb1a2f',
-          categoryId: '6650d29a21f0205cce148ab1',
+          currency: '6650cddc7cb8435306eb1a2f',
+          category: '6650d29a21f0205cce148ab1',
           amount: 100,
           details: 'test',
         };
@@ -481,8 +481,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -562,8 +562,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -631,8 +631,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -693,8 +693,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -752,8 +752,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          categoryId: categoryResponce._id,
-          currencyId: currencyResponce._id,
+          category: categoryResponce._id,
+          currency: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
