@@ -1,8 +1,11 @@
 import { Test, type TestingModule } from '@nestjs/testing';
-import type { DraftExpenseDto } from '../dto/draft-expense.dto';
 import { ExpensesController } from '../controllers/expenses.controller';
 import { ExpensesService } from '../services/expenses.service';
-import { type QueryEpxensesDto, type UpdateExpenseDto } from '../dto';
+import {
+  type CreateExpenseDto,
+  type QueryEpxensesDto,
+  type UpdateExpenseDto,
+} from '../dto';
 
 describe('expensesController', () => {
   let controller: ExpensesController;
@@ -77,10 +80,10 @@ describe('expensesController', () => {
 
   describe('create', () => {
     it('should create an expense', async () => {
-      const createExpenseDto: DraftExpenseDto = {
+      const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        categoryId: 'category-id',
-        currencyId: 'currency-id',
+        category: 'category-id',
+        currency: 'currency-id',
         amount: 100,
         date: new Date(),
         details: 'details',

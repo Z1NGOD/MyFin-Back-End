@@ -6,7 +6,7 @@ import { Expense, ExpensesDocument } from '../models';
 
 interface EpxnesesAndTotalCount {
   expenses: ExpensesDocument[];
-  totalCount: number;
+  totalCount: { count: number }[];
 }
 
 interface EpxnesesTotalMoneyAmount {
@@ -21,8 +21,7 @@ export class ExpenseRepository {
   ) {}
 
   async create(createExpenseDto: CreateExpenseDto) {
-    const expense = new this.ExpenseModel(createExpenseDto);
-    return expense.save();
+    return await this.ExpenseModel.create(createExpenseDto);
   }
 
   async calculateAmount(userId: string): Promise<number> {
@@ -55,20 +54,25 @@ export class ExpenseRepository {
 
     const result = await this.ExpenseModel.aggregate<EpxnesesAndTotalCount>([
       { $match: { userId: id } },
-      { $sort: { createdAt: -1 } },
-      { $limit: limitInt },
-      { $skip: skip },
       {
-        $group: {
-          _id: null,
-          totalCount: { $sum: 1 },
-          expenses: { $push: '$$ROOT' },
+        $facet: {
+          expenses: [
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limitInt },
+          ],
+          totalCount: [{ $count: 'count' }],
         },
       },
     ]).exec();
 
-    const expenses = result[0]?.expenses || [];
-    const totalCount = result[0]?.totalCount || 0;
+    const rawExpenses = result[0]?.expenses || [];
+    const totalCount = result[0]?.totalCount[0]?.count || 0;
+
+    const expenses = await this.ExpenseModel.populate(rawExpenses, [
+      { path: 'category' },
+      { path: 'currency' },
+    ]);
 
     return {
       expenses,

@@ -10,14 +10,14 @@ export class CreateExpenseDto {
   userId: string;
 
   @ApiProperty({
-    default: 'Food',
+    default: 'id',
   })
   @IsNotEmpty()
   @IsString()
   category: string;
 
   @ApiProperty({
-    default: '$',
+    default: 'id',
   })
   @IsNotEmpty()
   @IsString()

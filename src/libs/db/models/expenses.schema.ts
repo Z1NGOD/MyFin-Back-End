@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { User } from './user.schema';
+import { Category } from './category.schema';
+import { Currency } from './currency.schema';
 
 export type ExpensesDocument = HydratedDocument<Expense>;
 
@@ -10,14 +12,18 @@ export class Expense {
   userId: User;
 
   @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
     required: true,
   })
-  category: string;
+  category: Category;
 
   @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Currency',
     required: true,
   })
-  currency: string;
+  currency: Currency;
 
   @Prop({ required: true })
   amount: number;

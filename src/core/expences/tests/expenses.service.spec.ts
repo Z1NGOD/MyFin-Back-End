@@ -2,9 +2,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { CategoriesRepository, CurrenciesRepository } from '@libs/db';
 import { ExpenseRepository } from '../../../libs/db/repositories/expences.repository';
 import { ExpensesService } from '../services/expenses.service';
-import { type CreateExpenseDto } from '../dto/create-expense.dto';
-import { type UpdateExpenseDto } from '../dto/update-expense.dto';
-import { type DraftExpenseDto } from '../dto/draft-expense.dto';
+import type { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 
 describe('expensesService', () => {
   let service: ExpensesService;
@@ -59,10 +57,10 @@ describe('expensesService', () => {
       const fixedDate = new Date('2023-01-01T00:00:00Z');
       jest.spyOn(global, 'Date').mockImplementation(() => fixedDate);
 
-      const draftExpenseDto: DraftExpenseDto = {
+      const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        categoryId: '66cca6e1bcca345eb76427fa',
-        currencyId: '66b8c50a36f209530248369d',
+        category: '66cca6e1bcca345eb76427fa',
+        currency: '66b8c50a36f209530248369d',
         amount: 100,
         date: fixedDate,
         details: 'details',
@@ -80,27 +78,10 @@ describe('expensesService', () => {
         exchangeRate: 1,
       });
 
-      const category = await categoriesRepository.findById(
-        draftExpenseDto.categoryId,
-      );
-
-      const currency = await currenciesRepository.findById(
-        draftExpenseDto.currencyId,
-      );
-
-      const createExpenseDto: CreateExpenseDto = {
-        userId: 'user-id',
-        category: category.name,
-        currency: currency.symbol,
-        amount: 100,
-        details: 'details',
-        date: fixedDate,
-      };
-
       const result = { ...createExpenseDto, _id: 'expense-id' };
       jest.spyOn(repository, 'create').mockResolvedValue(result as any);
 
-      expect(await service.create(draftExpenseDto)).toBe(result);
+      expect(await service.create(createExpenseDto)).toBe(result);
       expect(repository.create).toHaveBeenCalledWith(createExpenseDto);
       expect(repository.create).toHaveBeenCalledTimes(1);
     });

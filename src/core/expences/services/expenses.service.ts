@@ -5,7 +5,6 @@ import {
   ExpenseRepository,
 } from '@libs/db';
 import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
-import { DraftExpenseDto } from '../dto/draft-expense.dto';
 
 @Injectable()
 export class ExpensesService {
@@ -15,29 +14,20 @@ export class ExpensesService {
     private readonly currencyRepository: CurrenciesRepository,
   ) {}
 
-  async create(draftExepnseDto: DraftExpenseDto) {
+  async create(createExpenseDto: CreateExpenseDto) {
     const category = await this.categoryRepository.findById(
-      draftExepnseDto.categoryId,
+      createExpenseDto.category,
     );
     if (!category) {
-      throw new BadRequestException(draftExepnseDto.categoryId);
+      throw new BadRequestException('No such category');
     }
 
     const currency = await this.currencyRepository.findById(
-      draftExepnseDto.currencyId,
+      createExpenseDto.currency,
     );
     if (!currency) {
       throw new BadRequestException('No such currency');
     }
-
-    const createExpenseDto: CreateExpenseDto = {
-      userId: draftExepnseDto.userId,
-      category: category.name,
-      currency: currency.symbol,
-      amount: draftExepnseDto.amount,
-      date: draftExepnseDto.date,
-      details: draftExepnseDto.details,
-    };
 
     return this.expenseRepository.create(createExpenseDto);
   }

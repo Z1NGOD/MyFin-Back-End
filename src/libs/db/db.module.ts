@@ -41,10 +41,7 @@ import {
         name: Currency.name,
         schema: CurrencySchema,
       },
-      {
-        name: Expense.name,
-        schema: ExpensesSchema,
-      },
+      { name: Expense.name, schema: ExpensesSchema },
       {
         name: Budgets.name,
         schema: BudgetsSchema,

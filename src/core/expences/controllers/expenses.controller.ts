@@ -13,8 +13,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenAuthGuard } from '@libs/security';
 import { ExpensesService } from '../services/expenses.service';
-import { QueryEpxensesDto, UpdateExpenseDto } from '../dto';
-import { DraftExpenseDto } from '../dto/draft-expense.dto';
+import { QueryEpxensesDto, UpdateExpenseDto, CreateExpenseDto } from '../dto';
 
 @ApiTags('Expenses')
 @ApiBearerAuth()
@@ -75,7 +74,7 @@ export class ExpensesController {
     return this.expensesService.findOne(id);
   }
 
-  @ApiBody({ type: DraftExpenseDto })
+  @ApiBody({ type: CreateExpenseDto })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Expense created successfully',
@@ -89,8 +88,8 @@ export class ExpensesController {
     description: 'Internal server error',
   })
   @Post('create')
-  create(@Body() draftExepnseDto: DraftExpenseDto) {
-    return this.expensesService.create(draftExepnseDto);
+  create(@Body() createExpenseDto: CreateExpenseDto) {
+    return this.expensesService.create(createExpenseDto);
   }
 
   @ApiBody({ type: UpdateExpenseDto })
