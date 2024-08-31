@@ -34,11 +34,4 @@ export class CreateUserDto {
   })
   @IsStrongPassword()
   password: string;
-
-  constructor(body: CreateUserDto) {
-    this.firstName = body?.firstName;
-    this.lastName = body?.lastName;
-    this.email = body?.email;
-    this.password = body?.password;
-  }
 }

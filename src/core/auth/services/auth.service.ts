@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '@core/user/dto';
-import { TokenService } from '@libs/security';
+import { TokenService, PasswordService } from '@libs/security';
 import { RedisService } from '@libs/redis/services/redis.service';
 import { UserService } from '@core/user/services';
 import { UserAlreadyExistsException } from '@common/exceptions';
@@ -15,6 +15,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly redisService: RedisService,
     private readonly config: ConfigService,
+    private readonly passwordService: PasswordService,
   ) {}
 
   async registration(userDto: CreateUserDto) {
@@ -26,9 +27,16 @@ export class AuthService {
       throw new UserAlreadyExistsException('User already exists');
     }
 
-    const user = await this.userService.create(userDto);
+    const hashedPassword = await this.passwordService.scryptHash(
+      userDto.password,
+    );
+
     const payload = { sub: userDto };
     const tokens = await this.createTokens(payload);
+    const user = await this.userService.create({
+      ...userDto,
+      password: hashedPassword,
+    });
 
     return { user, ...tokens };
   }
@@ -41,6 +49,14 @@ export class AuthService {
     const user = await this.userService.findByEmail(userDto.email);
     if (!user) {
       throw new BadRequestException('User not found');
+    }
+
+    const isPasswordCorrect = await this.passwordService.scryptVerify(
+      userDto.password,
+      user.password,
+    );
+    if (!isPasswordCorrect) {
+      throw new BadRequestException('Wrong password');
     }
 
     const payload = { sub: user._id, email: user.email };
