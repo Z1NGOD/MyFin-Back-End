@@ -54,25 +54,49 @@ export class ExpenseRepository {
 
     const result = await this.ExpenseModel.aggregate<EpxnesesAndTotalCount>([
       { $match: { userId: id } },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limitInt },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $unwind: '$category' },
+      {
+        $lookup: {
+          from: 'currencies',
+          localField: 'currencyId',
+          foreignField: '_id',
+          as: 'currency',
+        },
+      },
+      { $unwind: '$currency' },
+      {
+        $addFields: {
+          category: '$category',
+          currency: '$currency',
+        },
+      },
+      {
+        $project: {
+          categoryId: 0,
+          currencyId: 0,
+        },
+      },
       {
         $facet: {
-          expenses: [
-            { $sort: { createdAt: -1 } },
-            { $skip: skip },
-            { $limit: limitInt },
-          ],
+          expenses: [{ $match: {} }],
           totalCount: [{ $count: 'count' }],
         },
       },
     ]).exec();
 
-    const rawExpenses = result[0]?.expenses || [];
+    const expenses = result[0]?.expenses || [];
     const totalCount = result[0]?.totalCount[0]?.count || 0;
-
-    const expenses = await this.ExpenseModel.populate(rawExpenses, [
-      { path: 'category' },
-      { path: 'currency' },
-    ]);
 
     return {
       expenses,

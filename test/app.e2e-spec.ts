@@ -330,8 +330,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -352,8 +352,8 @@ describe('appController (e2e)', () => {
       it('unsuccessfull', async () => {
         const expenseMock = {
           userId: '',
-          currency: '6650cddc7cb8435306eb1a2f',
-          category: '6650d29a21f0205cce148ab1',
+          currencyId: '6650cddc7cb8435306eb1a2f',
+          categoryId: '6650d29a21f0205cce148ab1',
           amount: 100,
           details: 'test',
         };
@@ -405,8 +405,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -429,8 +429,8 @@ describe('appController (e2e)', () => {
       it('unsuccessfull', async () => {
         const expenseMock = {
           userId: '',
-          currency: '6650cddc7cb8435306eb1a2f',
-          category: '6650d29a21f0205cce148ab1',
+          currencyId: '6650cddc7cb8435306eb1a2f',
+          categoryId: '6650d29a21f0205cce148ab1',
           amount: 100,
           details: 'test',
         };
@@ -481,8 +481,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -495,8 +495,8 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.CREATED);
         expect(res.body).toHaveProperty('_id');
         expect(res.body).toHaveProperty('userId');
-        expect(res.body).toHaveProperty('category');
-        expect(res.body).toHaveProperty('currency');
+        expect(res.body).toHaveProperty('categoryId');
+        expect(res.body).toHaveProperty('currencyId');
         expect(res.body).toHaveProperty('amount');
         expect(res.body).toHaveProperty('date');
         expect(res.body).toHaveProperty('details');
@@ -562,8 +562,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -586,8 +586,8 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.OK);
         expect(resUpdate.body).toHaveProperty('_id');
         expect(resUpdate.body).toHaveProperty('userId');
-        expect(resUpdate.body).toHaveProperty('category');
-        expect(resUpdate.body).toHaveProperty('currency');
+        expect(resUpdate.body).toHaveProperty('categoryId');
+        expect(resUpdate.body).toHaveProperty('currencyId');
         expect(resUpdate.body).toHaveProperty('amount');
         expect(resUpdate.body).toHaveProperty('date');
         expect(resUpdate.body).toHaveProperty('details');
@@ -631,8 +631,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -693,8 +693,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -752,8 +752,8 @@ describe('appController (e2e)', () => {
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: categoryResponce._id,
-          currency: currencyResponce._id,
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',

@@ -14,14 +14,14 @@ export class CreateExpenseDto {
   })
   @IsNotEmpty()
   @IsString()
-  category: string;
+  categoryId: string;
 
   @ApiProperty({
     default: 'id',
   })
   @IsNotEmpty()
   @IsString()
-  currency: string;
+  currencyId: string;
 
   @ApiProperty({
     default: 1,

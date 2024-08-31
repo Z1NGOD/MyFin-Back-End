@@ -82,8 +82,8 @@ describe('expensesController', () => {
     it('should create an expense', async () => {
       const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        category: 'category-id',
-        currency: 'currency-id',
+        categoryId: 'category-id',
+        currencyId: 'currency-id',
         amount: 100,
         date: new Date(),
         details: 'details',

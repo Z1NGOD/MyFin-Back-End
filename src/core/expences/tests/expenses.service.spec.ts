@@ -59,8 +59,8 @@ describe('expensesService', () => {
 
       const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        category: '66cca6e1bcca345eb76427fa',
-        currency: '66b8c50a36f209530248369d',
+        categoryId: '66cca6e1bcca345eb76427fa',
+        currencyId: '66b8c50a36f209530248369d',
         amount: 100,
         date: fixedDate,
         details: 'details',
@@ -92,8 +92,8 @@ describe('expensesService', () => {
       const result = [
         {
           userId: 'user-id',
-          category: 'Food',
-          currency: '$',
+          categoryId: 'Food',
+          currencyId: '$',
           amount: 100,
           details: 'details',
           date: new Date(),

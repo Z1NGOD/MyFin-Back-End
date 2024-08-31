@@ -16,14 +16,14 @@ export class Expense {
     ref: 'Category',
     required: true,
   })
-  category: Category;
+  categoryId: Category;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Currency',
     required: true,
   })
-  currency: Currency;
+  currencyId: Currency;
 
   @Prop({ required: true })
   amount: number;

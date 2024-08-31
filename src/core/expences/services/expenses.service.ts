@@ -16,14 +16,14 @@ export class ExpensesService {
 
   async create(createExpenseDto: CreateExpenseDto) {
     const category = await this.categoryRepository.findById(
-      createExpenseDto.category,
+      createExpenseDto.categoryId,
     );
     if (!category) {
       throw new BadRequestException('No such category');
     }
 
     const currency = await this.currencyRepository.findById(
-      createExpenseDto.currency,
+      createExpenseDto.currencyId,
     );
     if (!currency) {
       throw new BadRequestException('No such currency');
