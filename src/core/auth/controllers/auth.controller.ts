@@ -5,6 +5,8 @@ import {
   HttpStatus,
   UseGuards,
   Request,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '@core/user/dto';
@@ -13,6 +15,7 @@ import { AuthService } from '../services';
 import { LoginUserDto } from '../dto';
 import { RequestUser } from '../interfaces';
 import { TokensDto } from '../dto/tokens.dto';
+import { UserEntity } from '../entity/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -32,9 +35,20 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'User already exists',
   })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('registration')
-  registration(@Body() createUserDto: CreateUserDto) {
-    return this.authService.registration(createUserDto);
+  async registration(@Body() createUserDto: CreateUserDto) {
+    const result = await this.authService.registration(createUserDto);
+    const parsedUser = new UserEntity({
+      _id: result.user._id.toString(),
+      firstName: result.user.firstName,
+      lastName: result.user.lastName,
+      email: result.user.email,
+      password: result.user.password,
+    });
+    const accessToken = result.accessToken;
+    const refreshToken = result.refreshToken;
+    return { user: parsedUser, accessToken, refreshToken };
   }
 
   @ApiBody({ type: LoginUserDto })
@@ -46,9 +60,20 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'User was not found',
   })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
-  login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.login(loginUserDto);
+  async login(@Body() loginUserDto: LoginUserDto) {
+    const result = await this.authService.login(loginUserDto);
+    const parsedUser = new UserEntity({
+      _id: result.user._id.toString(),
+      firstName: result.user.firstName,
+      lastName: result.user.lastName,
+      email: result.user.email,
+      password: result.user.password,
+    });
+    const accessToken = result.accessToken;
+    const refreshToken = result.refreshToken;
+    return { user: parsedUser, accessToken, refreshToken };
   }
 
   @ApiBody({ type: RequestUser })
