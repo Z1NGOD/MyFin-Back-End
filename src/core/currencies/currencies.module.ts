@@ -7,5 +7,6 @@ import { CurrenciesController } from './controllers/currencies.controller';
   imports: [DbModule],
   controllers: [CurrenciesController],
   providers: [CurrenciesService, CurrenciesRepository],
+  exports: [CurrenciesRepository],
 })
 export class CurrenciesModule {}

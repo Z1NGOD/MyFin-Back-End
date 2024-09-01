@@ -2,8 +2,8 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { ExpensesController } from '../controllers/expenses.controller';
 import { ExpensesService } from '../services/expenses.service';
 import {
-  type QueryEpxensesDto,
   type CreateExpenseDto,
+  type QueryEpxensesDto,
   type UpdateExpenseDto,
 } from '../dto';
 
@@ -21,6 +21,7 @@ describe('expensesController', () => {
             create: jest.fn(),
             findAll: jest.fn(),
             findOne: jest.fn(),
+            calculateAmount: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
           },
@@ -81,8 +82,8 @@ describe('expensesController', () => {
     it('should create an expense', async () => {
       const createExpenseDto: CreateExpenseDto = {
         userId: 'user-id',
-        category: 'category-id',
-        currency: 'currency-id',
+        categoryId: 'category-id',
+        currencyId: 'currency-id',
         amount: 100,
         date: new Date(),
         details: 'details',
@@ -131,6 +132,17 @@ describe('expensesController', () => {
 
       expect(await controller.remove('expense-id')).toBe(result);
       expect(service.remove).toHaveBeenCalledWith('expense-id');
+    });
+  });
+
+  describe('calculateExpenses', () => {
+    it('should calculate expenses', async () => {
+      const result = 1;
+
+      jest.spyOn(service, 'calculateAmount').mockResolvedValue(result);
+
+      expect(await controller.calculateAmount('expense-id')).toBe(result);
+      expect(service.calculateAmount).toHaveBeenCalledWith('expense-id');
     });
   });
 });

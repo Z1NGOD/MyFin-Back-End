@@ -3,15 +3,15 @@ import { HydratedDocument } from 'mongoose';
 
 export type CurrenciesDocument = HydratedDocument<Currency>;
 
-@Schema()
+@Schema({ versionKey: false })
 export class Currency {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   symbol: string;
 
-  @Prop()
+  @Prop({ required: true })
   exchangeRate: number;
 }
 
