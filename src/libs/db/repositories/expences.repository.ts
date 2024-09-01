@@ -74,6 +74,7 @@ export class ExpenseRepository {
             _id: 1,
             userId: 1,
             amount: 1,
+            date: 1,
             description: 1,
             createdAt: 1,
             updatedAt: 1,
