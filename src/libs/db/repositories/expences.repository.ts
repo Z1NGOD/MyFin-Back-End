@@ -4,11 +4,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
 import { Expense, ExpensesDocument } from '../models';
 
-interface EpxnesesAndTotalCount {
-  expenses: ExpensesDocument[];
-  totalCount: { count: number }[];
-}
-
 interface EpxnesesTotalMoneyAmount {
   amount: number;
 }
@@ -52,51 +47,43 @@ export class ExpenseRepository {
     const pageInt = Number(page);
     const skip = limitInt * (pageInt - 1);
 
-    const result = await this.ExpenseModel.aggregate<EpxnesesAndTotalCount>([
-      { $match: { userId: id } },
-      { $sort: { createdAt: -1 } },
-      { $skip: skip },
-      { $limit: limitInt },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'categoryId',
-          foreignField: '_id',
-          as: 'category',
+    const [expenses, totalCount] = await Promise.all([
+      this.ExpenseModel.aggregate([
+        { $match: { userId: id } },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limitInt },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'categoryId',
+            foreignField: '_id',
+            as: 'category',
+          },
         },
-      },
-      { $unwind: '$category' },
-      {
-        $lookup: {
-          from: 'currencies',
-          localField: 'currencyId',
-          foreignField: '_id',
-          as: 'currency',
+        {
+          $lookup: {
+            from: 'currencies',
+            localField: 'currencyId',
+            foreignField: '_id',
+            as: 'currency',
+          },
         },
-      },
-      { $unwind: '$currency' },
-      {
-        $addFields: {
-          category: '$category',
-          currency: '$currency',
+        {
+          $project: {
+            _id: 1,
+            userId: 1,
+            amount: 1,
+            description: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            category: { $arrayElemAt: ['$category', 0] },
+            currency: { $arrayElemAt: ['$currency', 0] },
+          },
         },
-      },
-      {
-        $project: {
-          categoryId: 0,
-          currencyId: 0,
-        },
-      },
-      {
-        $facet: {
-          expenses: [{ $match: {} }],
-          totalCount: [{ $count: 'count' }],
-        },
-      },
-    ]).exec();
-
-    const expenses = result[0]?.expenses || [];
-    const totalCount = result[0]?.totalCount[0]?.count || 0;
+      ]).exec(),
+      this.ExpenseModel.countDocuments({ userId: id }),
+    ]);
 
     return {
       expenses,
