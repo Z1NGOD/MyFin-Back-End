@@ -75,7 +75,7 @@ export class ExpenseRepository {
             userId: 1,
             amount: 1,
             date: 1,
-            description: 1,
+            details: 1,
             createdAt: 1,
             updatedAt: 1,
             category: { $arrayElemAt: ['$category', 0] },
