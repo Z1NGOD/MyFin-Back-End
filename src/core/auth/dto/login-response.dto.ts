@@ -1,18 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { UserEntity } from '../entity/user.entity';
 
 export class LoginResponseDto {
-  @ApiProperty({
-    default: 'Yaroslav@gmail.com',
-  })
   @Expose()
-  email: string;
+  @Type(() => UserEntity)
+  user: UserEntity;
 
-  @ApiProperty()
   @Expose()
   accessToken: string;
 
-  @ApiProperty()
   @Expose()
   refreshToken: string;
 }
