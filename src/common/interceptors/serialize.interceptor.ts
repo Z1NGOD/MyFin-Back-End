@@ -7,13 +7,13 @@ import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { plainToClass } from 'class-transformer';
 
-export type ClassContrustor = new (...args: any[]) => object;
+export type ClassConstructor = new (...args: any[]) => object;
 
 export class SerializeInterceptor implements NestInterceptor {
-  constructor(private dto: ClassContrustor) {}
+  constructor(private dto: ClassConstructor) {}
   intercept(context: ExecutionContext, handler: CallHandler): Observable<any> {
     return handler.handle().pipe(
-      map((data: ClassContrustor) => {
+      map((data: ClassConstructor) => {
         return plainToClass(this.dto, data, {
           excludeExtraneousValues: true,
           exposeUnsetFields: false,
