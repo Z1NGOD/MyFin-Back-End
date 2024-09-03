@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { RedisService } from '@libs/redis/services/redis.service';
 import { UserAlreadyExistsException } from '@common/exceptions';
 import { AuthService } from '../services';
-import { TokenService } from '../../../libs/security';
+import { PasswordService, TokenService } from '../../../libs/security';
 import { UserService } from '../../user/services/user.service';
 import { type LoginUserDto } from '../dto';
 import { type CreateUserDto } from '../../user/dto';
@@ -16,6 +16,7 @@ describe('authService', () => {
   let userService: UserService;
   let redisService: RedisService;
   let configService: ConfigService;
+  let passwordService: PasswordService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -54,6 +55,13 @@ describe('authService', () => {
             }),
           },
         },
+        {
+          provide: PasswordService,
+          useValue: {
+            scryptHash: jest.fn(),
+            scryptVerify: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -62,6 +70,7 @@ describe('authService', () => {
     userService = module.get<UserService>(UserService);
     redisService = module.get<RedisService>(RedisService);
     configService = module.get<ConfigService>(ConfigService);
+    passwordService = module.get<PasswordService>(PasswordService);
   });
 
   describe('registration', () => {
@@ -147,6 +156,13 @@ describe('authService', () => {
       jest
         .spyOn(tokenService, 'createRefreshToken')
         .mockResolvedValue('refresh_token');
+
+      jest
+        .spyOn(passwordService, 'scryptHash')
+        .mockResolvedValue('1231zxsdc4213452cz');
+      const hashedPassword = await passwordService.scryptHash(user.password);
+      jest.spyOn(passwordService, 'scryptVerify').mockResolvedValue(true);
+      await passwordService.scryptVerify(user.password, hashedPassword);
 
       const userDto: LoginUserDto = {
         email: 'john.doe@example.com',

@@ -7,6 +7,7 @@ import {
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { RedisMemoryServer } from 'redis-memory-server';
 import * as request from 'supertest';
+import { PasswordService } from '@libs/security';
 import { BudgetType } from '@core/budgets/enum/budget.enum';
 import { AppModule } from '../src/app.module';
 import type {
@@ -21,6 +22,10 @@ describe('appController (e2e)', () => {
   let app: INestApplication;
   let mongoServer: MongoMemoryServer;
   let redisServer: RedisMemoryServer;
+  const passwordService = {
+    scryptVerify: () => true,
+    scryptHash: () => 'string',
+  };
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
@@ -31,7 +36,10 @@ describe('appController (e2e)', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(PasswordService)
+      .useValue(passwordService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());

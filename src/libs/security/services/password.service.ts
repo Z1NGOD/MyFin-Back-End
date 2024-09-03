@@ -12,8 +12,8 @@ export class PasswordService {
     return `${hashBuffer.toString('hex')}:${saltInUse}`;
   }
 
-  async scryptVerify(passForHash: string, hashPass: string) {
-    const [, salt] = hashPass.split(':');
-    return (await this.scryptHash(passForHash, salt)) === hashPass;
+  async scryptVerify(unverifiedPassword: string, hashedPassword: string) {
+    const [, salt] = hashedPassword.split(':');
+    return (await this.scryptHash(unverifiedPassword, salt)) === hashedPassword;
   }
 }

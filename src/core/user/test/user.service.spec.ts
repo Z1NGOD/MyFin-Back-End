@@ -1,4 +1,5 @@
 import { Test, type TestingModule } from '@nestjs/testing';
+import { PasswordService } from '@libs/security';
 import { UserRepository } from '../../../libs/db/repositories/user.repository';
 import { UserService } from '../services/user.service';
 import { type UpdateUserDto, type CreateUserDto } from '../dto';
@@ -6,6 +7,7 @@ import { type UpdateUserDto, type CreateUserDto } from '../dto';
 describe('userService', () => {
   let service: UserService;
   let repository: UserRepository;
+  let passwordService: PasswordService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,11 +24,19 @@ describe('userService', () => {
             remove: jest.fn(),
           },
         },
+        {
+          provide: PasswordService,
+          useValue: {
+            scryptHash: jest.fn(),
+            scryptVerify: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     repository = module.get<UserRepository>(UserRepository);
+    passwordService = module.get<PasswordService>(PasswordService);
   });
 
   it('should be defined', () => {
@@ -149,9 +159,28 @@ describe('userService', () => {
         email: 'johnny.doe@example.com',
         password: 'newpassword123',
       };
+      const user = {
+        _id: 'user_id',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'hashedpassword123',
+      };
       const result = { ...updateUserDto, _id: 'user_id' };
-
+      jest.spyOn(repository, 'findOne').mockResolvedValue(user as any);
       jest.spyOn(repository, 'update').mockResolvedValue(result as any);
+      jest
+        .spyOn(passwordService, 'scryptHash')
+        .mockResolvedValue('1231zxsdc4213452cz');
+      const hashedPassword = await passwordService.scryptHash(
+        updateUserDto.password,
+      );
+      jest.spyOn(passwordService, 'scryptVerify').mockResolvedValue(true);
+      await passwordService.scryptVerify(
+        updateUserDto.password,
+        hashedPassword,
+      );
+      updateUserDto.password = hashedPassword;
 
       expect(await service.update('user_id', updateUserDto)).toBe(result);
       expect(repository.update).toHaveBeenCalledWith('user_id', updateUserDto);
@@ -164,6 +193,24 @@ describe('userService', () => {
         email: 'johnny.doe@example.com',
         password: 'newpassword123',
       };
+
+      const user = {
+        _id: 'user_id',
+        password: 'hashedpassword123',
+      };
+
+      jest.spyOn(repository, 'findOne').mockResolvedValue(user as any);
+      jest
+        .spyOn(passwordService, 'scryptHash')
+        .mockResolvedValue('1231zxsdc4213452cz');
+      const hashedPassword = await passwordService.scryptHash(
+        updateUserDto.password,
+      );
+      jest.spyOn(passwordService, 'scryptVerify').mockResolvedValue(true);
+      await passwordService.scryptVerify(
+        updateUserDto.password,
+        hashedPassword,
+      );
 
       jest
         .spyOn(repository, 'update')
