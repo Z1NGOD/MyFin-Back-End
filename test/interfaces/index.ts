@@ -1,5 +1,5 @@
-export type { Icategory } from './icategory.interface';
-export type { Ilogin } from './ilogin.interface';
-export type { Ibudget } from './ibudget.interface';
-export type { Iexpense } from './iexpense.interface';
-export type { Icurrency } from './icurrency.interface';
+export type { CategoryResponse } from './category.interface';
+export type { LoginResponse } from './login.interface';
+export type { BudgetResponse } from './budget.interface';
+export type { ExpenseResponse } from './expense.interface';
+export type { CurrencyResponse } from './currency.interface';

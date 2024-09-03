@@ -1,4 +1,4 @@
-export interface Ilogin {
+export interface LoginResponse {
   user: {
     _id: string;
     email: string;
