@@ -1,4 +1,4 @@
-export interface Ibudget {
+export interface BudgetResponse {
   _id: string;
   userId: string;
   currencyId: string;

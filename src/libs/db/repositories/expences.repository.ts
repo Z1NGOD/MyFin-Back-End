@@ -4,9 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
 import { Expense, ExpensesDocument } from '../models';
 
-interface EpxnesesAndTotalCount {
-  expenses: ExpensesDocument[];
-  totalCount: number;
+interface EpxnesesTotalMoneyAmount {
   amount: number;
 }
 
@@ -18,8 +16,22 @@ export class ExpenseRepository {
   ) {}
 
   async create(createExpenseDto: CreateExpenseDto) {
-    const expense = new this.ExpenseModel(createExpenseDto);
-    return expense.save();
+    return await this.ExpenseModel.create(createExpenseDto);
+  }
+
+  async calculateAmount(userId: string): Promise<number> {
+    const id = new Types.ObjectId(userId);
+    const result = await this.ExpenseModel.aggregate<EpxnesesTotalMoneyAmount>([
+      { $match: { userId: id } },
+      {
+        $group: {
+          _id: null,
+          amount: { $sum: '$amount' },
+        },
+      },
+    ]).exec();
+
+    return result[0]?.amount || 0;
   }
 
   async findAll(
@@ -29,35 +41,54 @@ export class ExpenseRepository {
   ): Promise<{
     expenses: ExpensesDocument[];
     totalCount: number;
-    amount: number;
   }> {
     const id = new Types.ObjectId(userId);
     const limitInt = Number(limit);
     const pageInt = Number(page);
     const skip = limitInt * (pageInt - 1);
 
-    const result = await this.ExpenseModel.aggregate<EpxnesesAndTotalCount>([
-      { $match: { userId: id } },
-      { $limit: limitInt },
-      { $skip: skip },
-      {
-        $group: {
-          _id: null,
-          totalCount: { $sum: 1 },
-          expenses: { $push: '$$ROOT' },
-          amount: { $sum: '$amount' },
+    const [expenses, totalCount] = await Promise.all([
+      this.ExpenseModel.aggregate([
+        { $match: { userId: id } },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limitInt },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'categoryId',
+            foreignField: '_id',
+            as: 'category',
+          },
         },
-      },
-    ]).exec();
-
-    const expenses = result[0]?.expenses || [];
-    const totalCount = result[0]?.totalCount || 0;
-    const amount = result[0]?.amount || 0;
+        {
+          $lookup: {
+            from: 'currencies',
+            localField: 'currencyId',
+            foreignField: '_id',
+            as: 'currency',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            userId: 1,
+            amount: 1,
+            date: 1,
+            details: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            category: { $arrayElemAt: ['$category', 0] },
+            currency: { $arrayElemAt: ['$currency', 0] },
+          },
+        },
+      ]).exec(),
+      this.ExpenseModel.countDocuments({ userId: id }),
+    ]);
 
     return {
       expenses,
       totalCount,
-      amount,
     };
   }
 

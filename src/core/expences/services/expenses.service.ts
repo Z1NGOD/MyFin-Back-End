@@ -1,13 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { ExpenseRepository } from '@libs/db';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  CategoriesRepository,
+  CurrenciesRepository,
+  ExpenseRepository,
+} from '@libs/db';
 import { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 
 @Injectable()
 export class ExpensesService {
-  constructor(private readonly expenseRepository: ExpenseRepository) {}
+  constructor(
+    private readonly expenseRepository: ExpenseRepository,
+    private readonly categoryRepository: CategoriesRepository,
+    private readonly currencyRepository: CurrenciesRepository,
+  ) {}
 
-  create(createExpenseDto: CreateExpenseDto) {
+  async create(createExpenseDto: CreateExpenseDto) {
+    const category = await this.categoryRepository.findById(
+      createExpenseDto.categoryId,
+    );
+    if (!category) {
+      throw new BadRequestException('No such category');
+    }
+
+    const currency = await this.currencyRepository.findById(
+      createExpenseDto.currencyId,
+    );
+    if (!currency) {
+      throw new BadRequestException('No such currency');
+    }
+
     return this.expenseRepository.create(createExpenseDto);
+  }
+
+  calculateAmount(userId: string) {
+    return this.expenseRepository.calculateAmount(userId);
   }
 
   findAll(userId: string, limit: string, page: string) {

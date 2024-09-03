@@ -9,9 +9,13 @@ import { RedisMemoryServer } from 'redis-memory-server';
 import * as request from 'supertest';
 import { BudgetType } from '@core/budgets/enum/budget.enum';
 import { AppModule } from '../src/app.module';
-import { type Ilogin } from './interfaces/ilogin.interface';
-import { type Ibudget } from './interfaces/ibudget.interface';
-import { type Iexpense } from './interfaces/iexpense.interface';
+import type {
+  ExpenseResponse,
+  BudgetResponse,
+  LoginResponse,
+  CategoryResponse,
+  CurrencyResponse,
+} from './interfaces';
 
 describe('appController (e2e)', () => {
   let app: INestApplication;
@@ -107,7 +111,7 @@ describe('appController (e2e)', () => {
           .send(userMock)
           .expect(HttpStatus.CREATED);
 
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
         const refreshTokenMock = { refreshToken: loginResponce.refreshToken };
         const res = await request(app.getHttpServer())
           .post('/auth/updateAccessToken')
@@ -137,7 +141,7 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
 
         const budgetMock = {
           userId: loginResponce.user._id,
@@ -180,7 +184,7 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
 
         const budgetMock = {
           userId: loginResponce.user._id,
@@ -195,7 +199,7 @@ describe('appController (e2e)', () => {
           .send(budgetMock)
           .expect(HttpStatus.CREATED);
 
-        const resFind: Ibudget = res.body as Ibudget;
+        const resFind: BudgetResponse = res.body as BudgetResponse;
         const res2 = await request(app.getHttpServer())
           .get(`/budgets/${resFind._id}`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
@@ -225,7 +229,7 @@ describe('appController (e2e)', () => {
           .send(userMock)
           .expect(HttpStatus.CREATED);
 
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
         const updateBudgetMock = {
           amount: 200,
         };
@@ -241,7 +245,7 @@ describe('appController (e2e)', () => {
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .send(budgetMock)
           .expect(HttpStatus.CREATED);
-        const resType: Ibudget = res.body as Ibudget;
+        const resType: BudgetResponse = res.body as BudgetResponse;
 
         const res2 = await request(app.getHttpServer())
           .patch(`/budgets/update/${resType._id}`)
@@ -260,7 +264,7 @@ describe('appController (e2e)', () => {
         .post('/auth/login')
         .send(userMock)
         .expect(HttpStatus.CREATED);
-      const loginResponce: Ilogin = login.body as Ilogin;
+      const loginResponce: LoginResponse = login.body as LoginResponse;
       const updateBudgetMock = {
         amount: 200,
       };
@@ -276,7 +280,7 @@ describe('appController (e2e)', () => {
         .auth(loginResponce.accessToken, { type: 'bearer' })
         .send(budgetMock)
         .expect(HttpStatus.CREATED);
-      const resType: Ibudget = res.body as Ibudget;
+      const resType: BudgetResponse = res.body as BudgetResponse;
 
       const res2 = await request(app.getHttpServer())
         .patch(`/budgets/update/${resType._id}`)
@@ -296,12 +300,39 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -345,12 +376,39 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
 
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
@@ -362,7 +420,7 @@ describe('appController (e2e)', () => {
           .send(expenseMock)
           .expect(HttpStatus.CREATED);
 
-        const resType: Iexpense = res.body as Iexpense;
+        const resType: ExpenseResponse = res.body as ExpenseResponse;
 
         const res2 = await request(app.getHttpServer())
           .get(`/expenses/findOne/expense/${resType._id}`)
@@ -396,15 +454,43 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
+
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
         };
+
         const res = await request(app.getHttpServer())
           .post('/expenses/create')
           .auth(loginResponce.accessToken, { type: 'bearer' })
@@ -412,8 +498,8 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.CREATED);
         expect(res.body).toHaveProperty('_id');
         expect(res.body).toHaveProperty('userId');
-        expect(res.body).toHaveProperty('category');
-        expect(res.body).toHaveProperty('currency');
+        expect(res.body).toHaveProperty('categoryId');
+        expect(res.body).toHaveProperty('currencyId');
         expect(res.body).toHaveProperty('amount');
         expect(res.body).toHaveProperty('date');
         expect(res.body).toHaveProperty('details');
@@ -427,7 +513,7 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
         const expenseMock = {
           userId: loginResponce.user._id,
           amount: 100,
@@ -450,15 +536,43 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
+
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
         };
+
         const res = await request(app.getHttpServer())
           .post('/expenses/create')
           .auth(loginResponce.accessToken, { type: 'bearer' })
@@ -468,7 +582,7 @@ describe('appController (e2e)', () => {
         const updateExpenseMock = {
           amount: 200,
         };
-        const resType: Iexpense = res.body as Iexpense;
+        const resType: ExpenseResponse = res.body as ExpenseResponse;
         const resUpdate = await request(app.getHttpServer())
           .patch(`/expenses/update/${resType._id}`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
@@ -476,8 +590,8 @@ describe('appController (e2e)', () => {
           .expect(HttpStatus.OK);
         expect(resUpdate.body).toHaveProperty('_id');
         expect(resUpdate.body).toHaveProperty('userId');
-        expect(resUpdate.body).toHaveProperty('category');
-        expect(resUpdate.body).toHaveProperty('currency');
+        expect(resUpdate.body).toHaveProperty('categoryId');
+        expect(resUpdate.body).toHaveProperty('currencyId');
         expect(resUpdate.body).toHaveProperty('amount');
         expect(resUpdate.body).toHaveProperty('date');
         expect(resUpdate.body).toHaveProperty('details');
@@ -492,22 +606,50 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
+
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
         };
+
         const res = await request(app.getHttpServer())
           .post('/expenses/create')
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .send(expenseMock)
           .expect(HttpStatus.CREATED);
 
-        const resType: Iexpense = res.body as Iexpense;
+        const resType: ExpenseResponse = res.body as ExpenseResponse;
         const resUpdate = await request(app.getHttpServer())
           .patch(`/expenses/update/${resType._id}`)
           .auth(loginResponce.accessToken, { type: 'bearer' })
@@ -527,21 +669,49 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
+
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
         };
+
         const res = await request(app.getHttpServer())
           .post('/expenses/create')
           .auth(loginResponce.accessToken, { type: 'bearer' })
           .send(expenseMock)
           .expect(HttpStatus.CREATED);
-        const resType: Iexpense = res.body as Iexpense;
+        const resType: ExpenseResponse = res.body as ExpenseResponse;
 
         const res2 = await request(app.getHttpServer())
           .delete(`/expenses/delete/${resType._id}`)
@@ -559,15 +729,43 @@ describe('appController (e2e)', () => {
           .post('/auth/login')
           .send(userMock)
           .expect(HttpStatus.CREATED);
-        const loginResponce: Ilogin = login.body as Ilogin;
+        const loginResponce: LoginResponse = login.body as LoginResponse;
+        const categoryMock = {
+          name: 'Food',
+        };
+
+        const category = await request(app.getHttpServer())
+          .post('/categories/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(categoryMock)
+          .expect(HttpStatus.CREATED);
+
+        const categoryResponce: CategoryResponse =
+          category.body as CategoryResponse;
+
+        const currencyMock = {
+          name: 'USD',
+          symbol: '$',
+          exchangeRate: 1,
+        };
+
+        const currency = await request(app.getHttpServer())
+          .post('/currencies/create')
+          .auth(loginResponce.accessToken, { type: 'bearer' })
+          .send(currencyMock)
+          .expect(HttpStatus.CREATED);
+
+        const currencyResponce = currency.body as CurrencyResponse;
+
         const expenseMock = {
           userId: loginResponce.user._id,
-          category: 'Food',
-          currency: '$',
+          categoryId: categoryResponce._id,
+          currencyId: currencyResponce._id,
           amount: 100,
           date: new Date(),
           details: 'test',
         };
+
         await request(app.getHttpServer())
           .post('/expenses/create')
           .auth(loginResponce.accessToken, { type: 'bearer' })

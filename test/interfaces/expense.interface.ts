@@ -1,4 +1,4 @@
-export interface Iexpense {
+export interface ExpenseResponse {
   _id: string;
   userId: string;
   currency: string;

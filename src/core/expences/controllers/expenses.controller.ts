@@ -13,7 +13,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenAuthGuard } from '@libs/security';
 import { ExpensesService } from '../services/expenses.service';
-import { CreateExpenseDto, QueryEpxensesDto, UpdateExpenseDto } from '../dto';
+import { QueryEpxensesDto, UpdateExpenseDto, CreateExpenseDto } from '../dto';
 
 @ApiTags('Expenses')
 @ApiBearerAuth()
@@ -38,6 +38,23 @@ export class ExpensesController {
   findAll(@Param('userId') userId: string, @Query() query: QueryEpxensesDto) {
     const { limit, page } = query;
     return this.expensesService.findAll(userId, limit, page);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully retrieved expenses money amount',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'No expenses found',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Internal server error',
+  })
+  @Get('/amount/by-users/:userId')
+  calculateAmount(@Param('userId') userId: string) {
+    return this.expensesService.calculateAmount(userId);
   }
 
   @ApiResponse({

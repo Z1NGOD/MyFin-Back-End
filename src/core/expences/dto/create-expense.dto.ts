@@ -10,18 +10,18 @@ export class CreateExpenseDto {
   userId: string;
 
   @ApiProperty({
-    default: 'Food',
+    default: 'id',
   })
   @IsNotEmpty()
   @IsString()
-  category: string;
+  categoryId: string;
 
   @ApiProperty({
-    default: '$',
+    default: 'id',
   })
   @IsNotEmpty()
   @IsString()
-  currency: string;
+  currencyId: string;
 
   @ApiProperty({
     default: 1,
@@ -36,7 +36,7 @@ export class CreateExpenseDto {
   date: Date;
 
   @ApiProperty({
-    default: 'some kind of comment',
+    default: 'ATB',
   })
   @IsString()
   @MaxLength(15)

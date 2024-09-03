@@ -35,7 +35,4 @@ export const categoryDataJson = [
   {
     name: 'Restaurants',
   },
-  {
-    name: 'Other',
-  },
 ];
