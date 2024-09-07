@@ -9,9 +9,9 @@ import {
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '@core/user/dto';
 import { AccessTokenAuthGuard, RefreshTokenAuthGuard } from '@libs/security';
-// import { Serialize } from '@common/decorators/serialize.decorator';
+import { Serialize } from '@common/decorators/serialize.decorator';
 import { AuthService } from '../services';
-import { LoginUserDto, TokensDto } from '../dto';
+import { LoginResponseDto, LoginUserDto, TokensDto } from '../dto';
 import { RequestUser } from '../interfaces';
 
 @ApiTags('Auth')
@@ -32,7 +32,7 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'User already exists',
   })
-  // @Serialize(LoginResponseDto)
+  @Serialize(LoginResponseDto)
   @Post('registration')
   registration(@Body() createUserDto: CreateUserDto) {
     return this.authService.registration(createUserDto);
@@ -47,7 +47,7 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'User was not found',
   })
-  // @Serialize(LoginResponseDto)
+  @Serialize(LoginResponseDto)
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
     return await this.authService.login(loginUserDto);
