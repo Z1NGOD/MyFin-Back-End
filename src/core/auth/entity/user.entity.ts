@@ -1,7 +1,14 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
+
+interface ValuesProps {
+  obj: {
+    _id: string;
+  };
+}
 
 export class UserEntity {
   @Expose()
+  @Transform((value: ValuesProps) => value.obj._id.toString())
   _id: string;
   @Expose()
   firstName: string;
