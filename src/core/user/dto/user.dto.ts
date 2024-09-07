@@ -6,7 +6,7 @@ interface ValuesProps {
   };
 }
 
-export class UserEntity {
+export class UserDto {
   @Expose()
   @Transform((value: ValuesProps) => value.obj._id.toString())
   _id: string;

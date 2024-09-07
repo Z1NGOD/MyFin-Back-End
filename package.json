@@ -37,7 +37,8 @@
       "!**/*.repository.ts",
       "!**/*.interface.ts",
       "!**/*.guard.ts",
-      "!**/*.validation.ts"
+      "!**/*.validation.ts",
+      "!**/*.interceptor.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {

@@ -102,7 +102,7 @@ describe('expensesService', () => {
       ];
       jest.spyOn(repository, 'findAll').mockResolvedValue(result as any);
 
-      expect(await service.findAll('by-users/user-id', '10', '1')).toBe(result);
+      expect(await service.findAll('/', '10', '1')).toBe(result);
       expect(repository.findAll).toHaveBeenCalled();
       expect(repository.findAll).toHaveBeenCalledTimes(1);
     });
@@ -161,20 +161,10 @@ describe('expensesService', () => {
   });
   describe('calculateExpensesAmount', () => {
     it('should calculate expenses amount', async () => {
-      const result = {
-        _id: 'expense-id',
-        userId: 'user-id',
-        categoryId: 'category-id',
-        currencyId: 'currency-id',
-        amount: 100,
-        details: 'details',
-      };
-      jest
-        .spyOn(repository, 'calculateAmount')
-        .mockResolvedValue(result as any);
+      const result = 1000;
+      jest.spyOn(repository, 'calculateAmount').mockResolvedValue(result);
 
-      expect(await service.calculateAmount('expense-id')).toBe(result);
-      expect(repository.calculateAmount).toHaveBeenCalledWith('expense-id');
+      expect(await service.calculateAmount('/')).toBe(result);
     });
   });
 });

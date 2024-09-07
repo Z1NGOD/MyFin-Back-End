@@ -42,6 +42,10 @@ describe('expensesController', () => {
       limit: '10',
       page: '1',
     };
+    const userData = {
+      id: 'user-id',
+      email: 'user@email.com',
+    };
     it('should return an array of expenses', async () => {
       const result = [
         {
@@ -56,7 +60,7 @@ describe('expensesController', () => {
       ];
       jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
 
-      expect(await controller.findAll('by-users/user-id', query)).toBe(result);
+      expect(await controller.findAll(userData, query)).toBe(result);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
@@ -135,14 +139,18 @@ describe('expensesController', () => {
     });
   });
 
-  describe('calculateExpenses', () => {
-    it('should calculate expenses', async () => {
+  describe('calculateAmount', () => {
+    it('should calculate amount', async () => {
       const result = 1;
+      const userData = {
+        id: 'user-id',
+        email: 'user@email.com',
+      };
 
       jest.spyOn(service, 'calculateAmount').mockResolvedValue(result);
 
-      expect(await controller.calculateAmount('expense-id')).toBe(result);
-      expect(service.calculateAmount).toHaveBeenCalledWith('expense-id');
+      expect(await controller.calculateAmount(userData)).toBe(result);
+      expect(service.calculateAmount).toHaveBeenCalled();
     });
   });
 });

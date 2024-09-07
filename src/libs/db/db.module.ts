@@ -4,6 +4,8 @@ import {
   UserRepository,
   ExpenseRepository,
   BudgetsRepository,
+  CategoriesRepository,
+  CurrenciesRepository,
 } from './repositories';
 import { CategoryMigration, CurrencyMigration } from './migrations';
 import {
@@ -52,6 +54,8 @@ import {
     UserRepository,
     ExpenseRepository,
     BudgetsRepository,
+    CurrenciesRepository,
+    CategoriesRepository,
     CurrencyMigration,
     CategoryMigration,
   ],
@@ -60,6 +64,8 @@ import {
     UserRepository,
     ExpenseRepository,
     BudgetsRepository,
+    CurrenciesRepository,
+    CategoriesRepository,
   ],
 })
 export class DbModule {}
