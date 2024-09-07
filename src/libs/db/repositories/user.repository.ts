@@ -34,6 +34,6 @@ export class UserRepository {
   }
 
   remove(_id: string) {
-    return this.UserModel.deleteOne({ _id });
+    return this.UserModel.findByIdAndDelete(_id);
   }
 }

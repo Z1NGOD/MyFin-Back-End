@@ -38,17 +38,14 @@ export class ExpenseRepository {
     userId: string,
     limit: string,
     page: string,
-  ): Promise<{
-    expenses: ExpensesDocument[];
-    totalCount: number;
-  }> {
+  ): Promise<{ expenses: ExpensesDocument[]; totalCount: number }> {
     const id = new Types.ObjectId(userId);
     const limitInt = Number(limit);
     const pageInt = Number(page);
     const skip = limitInt * (pageInt - 1);
 
     const [expenses, totalCount] = await Promise.all([
-      this.ExpenseModel.aggregate([
+      this.ExpenseModel.aggregate<ExpensesDocument>([
         { $match: { userId: id } },
         { $sort: { createdAt: -1 } },
         { $skip: skip },
