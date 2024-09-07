@@ -3,7 +3,7 @@ import { ExpensesController } from '../controllers/expenses.controller';
 import { ExpensesService } from '../services/expenses.service';
 import {
   type CreateExpenseDto,
-  type QueryEpxensesDto,
+  type QueryExpensesDto,
   type UpdateExpenseDto,
 } from '../dto';
 
@@ -38,7 +38,7 @@ describe('expensesController', () => {
   });
 
   describe('findAll', () => {
-    const query: QueryEpxensesDto = {
+    const query: QueryExpensesDto = {
       limit: '10',
       page: '1',
     };

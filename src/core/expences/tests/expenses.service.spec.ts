@@ -1,6 +1,9 @@
 import { Test, type TestingModule } from '@nestjs/testing';
-import { CategoriesRepository, CurrenciesRepository } from '@libs/db';
-import { ExpenseRepository } from '../../../libs/db/repositories/expences.repository';
+import {
+  CategoriesRepository,
+  CurrenciesRepository,
+  ExpenseRepository,
+} from '@libs/db';
 import { ExpensesService } from '../services/expenses.service';
 import type { CreateExpenseDto, UpdateExpenseDto } from '../dto';
 
