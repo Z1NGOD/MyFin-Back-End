@@ -1,4 +1,19 @@
+import { Expose, Transform } from 'class-transformer';
+
+interface ValuesProps {
+  obj: {
+    _id: string;
+  };
+}
+
 export class UserDto {
-  id: string;
+  @Expose()
+  @Transform((value: ValuesProps) => value.obj._id.toString())
+  _id: string;
+  @Expose()
+  firstName: string;
+  @Expose()
+  lastName: string;
+  @Expose()
   email: string;
 }
