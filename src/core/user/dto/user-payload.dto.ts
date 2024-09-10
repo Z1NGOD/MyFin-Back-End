@@ -1,4 +1,4 @@
-export class SessionUserDto {
+export class UserPayloadDto {
   id: string;
   email: string;
 }

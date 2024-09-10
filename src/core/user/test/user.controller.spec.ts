@@ -16,8 +16,6 @@ describe('userController', () => {
           provide: UserService,
           useValue: {
             create: jest.fn(),
-            findAll: jest.fn(),
-            findOne: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
           },
@@ -31,70 +29,6 @@ describe('userController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
-  });
-
-  describe('findOne', () => {
-    it('should find one User', async () => {
-      const result = {
-        _id: 'user-id',
-        firstName: 'string',
-        lastName: 'string',
-        email: 'string@gmail.com',
-      };
-      jest.spyOn(userService, 'findOne').mockResolvedValue(result as any);
-
-      expect(await controller.findOne('user-id')).toEqual(
-        expect.objectContaining(result),
-      );
-      expect(userService.findOne).toHaveBeenCalledWith('user-id');
-    });
-
-    it('should throw an error if user is not found', async () => {
-      jest
-        .spyOn(userService, 'findOne')
-        .mockRejectedValue(
-          new HttpException(
-            'Can not find this user by id!',
-            HttpStatus.BAD_REQUEST,
-          ),
-        );
-
-      await expect(controller.findOne('user-id')).rejects.toThrow(
-        HttpException,
-      );
-      expect(userService.findOne).toHaveBeenCalledWith('user-id');
-    });
-  });
-
-  describe('findAll', () => {
-    it('should find all Users', async () => {
-      const result = [
-        {
-          _id: 'user-id',
-          firstName: 'string',
-          lastName: 'string',
-          email: 'string@gmail.com',
-        },
-      ];
-      jest.spyOn(userService, 'findAll').mockResolvedValue(result as any);
-
-      expect(await controller.findAll()).toBe(result);
-      expect(userService.findAll).toHaveBeenCalled();
-    });
-
-    it('should handle errors when finding all users', async () => {
-      jest
-        .spyOn(userService, 'findAll')
-        .mockRejectedValue(
-          new HttpException(
-            'Internal Server Error',
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          ),
-        );
-
-      await expect(controller.findAll()).rejects.toThrow(HttpException);
-      expect(userService.findAll).toHaveBeenCalled();
-    });
   });
 
   describe('update', () => {

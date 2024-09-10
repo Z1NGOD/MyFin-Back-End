@@ -13,7 +13,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessTokenAuthGuard } from '@libs/security';
 import { AuthUser } from '@common/decorators';
-import { SessionUserDto } from '@core/user/dto';
+import { UserPayloadDto } from '@core/user/dto';
 import { ExpensesService } from '../services/expenses.service';
 import { QueryExpensesDto, UpdateExpenseDto, CreateExpenseDto } from '../dto';
 
@@ -37,7 +37,7 @@ export class ExpensesController {
     description: 'Internal server error',
   })
   @Get()
-  findAll(@AuthUser() user: SessionUserDto, @Query() query: QueryExpensesDto) {
+  findAll(@AuthUser() user: UserPayloadDto, @Query() query: QueryExpensesDto) {
     const { limit, page } = query;
     return this.expensesService.findAll(user.id, limit, page);
   }
@@ -55,7 +55,7 @@ export class ExpensesController {
     description: 'Internal server error',
   })
   @Get('/amount')
-  calculateAmount(@AuthUser() user: SessionUserDto) {
+  calculateAmount(@AuthUser() user: UserPayloadDto) {
     return this.expensesService.calculateAmount(user.id);
   }
 

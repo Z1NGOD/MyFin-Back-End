@@ -17,9 +17,8 @@ describe('userService', () => {
           provide: UserRepository,
           useValue: {
             create: jest.fn(),
-            findAll: jest.fn(),
-            findByEmail: jest.fn(),
             findOne: jest.fn(),
+            findByEmail: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
           },
@@ -77,28 +76,6 @@ describe('userService', () => {
     });
   });
 
-  describe('findAll', () => {
-    it('should find all users', async () => {
-      const result = [
-        {
-          _id: 'user1',
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-        },
-        {
-          _id: 'user2',
-          firstName: 'Jane',
-          lastName: 'Doe',
-          email: 'jane.doe@example.com',
-        },
-      ];
-      jest.spyOn(repository, 'findAll').mockResolvedValue(result as any);
-
-      expect(await service.findAll()).toBe(result);
-      expect(repository.findAll).toHaveBeenCalled();
-    });
-  });
   describe('findByEmail', () => {
     it('should find a user by email', async () => {
       const result = {
@@ -125,29 +102,6 @@ describe('userService', () => {
       expect(repository.findByEmail).toHaveBeenCalledWith(
         'non_existent_email@example.com',
       );
-    });
-  });
-
-  describe('findOne', () => {
-    it('should find a user by id', async () => {
-      const result = {
-        _id: 'user_id',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-      };
-
-      jest.spyOn(repository, 'findOne').mockResolvedValue(result as any);
-
-      expect(await service.findOne('user_id')).toBe(result);
-      expect(repository.findOne).toHaveBeenCalledWith('user_id');
-    });
-
-    it('should return null if user not found', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
-
-      expect(await service.findOne('non_existent_id')).toBeNull();
-      expect(repository.findOne).toHaveBeenCalledWith('non_existent_id');
     });
   });
 

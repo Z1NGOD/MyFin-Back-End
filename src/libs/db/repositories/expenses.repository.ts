@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateExpenseDto, UpdateExpenseDto } from '@core/expences/dto';
 import { Expense, ExpensesDocument } from '../models';
 
-interface EpxnesesTotalMoneyAmount {
+interface ExpensesTotalMoneyAmount {
   amount: number;
 }
 
@@ -21,7 +21,7 @@ export class ExpenseRepository {
 
   async calculateAmount(userId: string): Promise<number> {
     const id = new Types.ObjectId(userId);
-    const result = await this.ExpenseModel.aggregate<EpxnesesTotalMoneyAmount>([
+    const result = await this.ExpenseModel.aggregate<ExpensesTotalMoneyAmount>([
       { $match: { userId: id } },
       {
         $group: {
