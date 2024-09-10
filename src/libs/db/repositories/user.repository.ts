@@ -19,16 +19,16 @@ export class UserRepository {
     return this.UserModel.find().exec();
   }
 
-  findOne(_id: string): Promise<UserDocument> {
-    return this.UserModel.findOne({ _id }).exec();
+  findOne(id: string): Promise<UserDocument> {
+    return this.UserModel.findOne({ _id: id }).exec();
   }
 
   findByEmail(email: string): Promise<UserDocument> {
     return this.UserModel.findOne({ email }).exec();
   }
 
-  update(_id: string, updateUserDto: UpdateUserDto): Promise<UserDocument> {
-    return this.UserModel.findOneAndUpdate({ _id }, updateUserDto, {
+  update(id: string, updateUserDto: UpdateUserDto): Promise<UserDocument> {
+    return this.UserModel.findOneAndUpdate({ _id: id }, updateUserDto, {
       new: true,
     });
   }

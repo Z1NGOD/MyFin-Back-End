@@ -14,20 +14,12 @@ export class UserService {
     return this.userRepository.create(createUserDto);
   }
 
-  findAll() {
-    return this.userRepository.findAll();
-  }
-
-  findOne(_id: string) {
-    return this.userRepository.findOne(_id);
-  }
-
   findByEmail(email: string) {
     return this.userRepository.findByEmail(email);
   }
 
-  async update(_id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(_id);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne(id);
     const isPasswordCorrect = await this.passwordService.scryptVerify(
       updateUserDto.password,
       user.password,
@@ -41,10 +33,10 @@ export class UserService {
       );
     }
 
-    return this.userRepository.update(_id, updateUserDto);
+    return this.userRepository.update(id, updateUserDto);
   }
 
-  remove(_id: string) {
-    return this.userRepository.remove(_id);
+  remove(id: string) {
+    return this.userRepository.remove(id);
   }
 }

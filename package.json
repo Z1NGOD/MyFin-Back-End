@@ -38,7 +38,10 @@
       "!**/*.interface.ts",
       "!**/*.guard.ts",
       "!**/*.validation.ts",
-      "!**/*.interceptor.ts"
+      "!**/*.interceptor.ts",
+      "!**/*.decorator.ts",
+      "!**/*.exception.ts",
+      "!**/*.enum.ts"
     ],
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
